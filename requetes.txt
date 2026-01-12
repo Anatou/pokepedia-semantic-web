@@ -60,3 +60,10 @@ ORDER BY asc(?num)
 
 
 716 lignes pour 721 pk (donc manque 5 entrées si pas de doublons)
+
+objectifs : 
+ - rajouter les infos de types en tuples à la base rdf
+	rajout de tuples dans l'espace de nom wiki: de pokepedia. ex: wiki:avantage, et wiki:types
+	ajout au graphe initial 
+ - construire des tuples estfort, estfaible et les rajouter à la base
+ 	nouveau vocabulaire : wiki:avantage
