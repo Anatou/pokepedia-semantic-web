@@ -6,7 +6,9 @@ The project is splitted between client and sparql server
 
 # Requirements
 This project uses **python 3.13.5** and **node 24.5.0** \
-To install the depedencies, use `pip install -r requirements.txt` in the base directory
+To install the dependencies:
+- use `pip install -r requirements.txt` in the root directory,
+- use `npm install` in the `client/front/` directory.
 
 # SPARQL Server
 
@@ -21,17 +23,15 @@ The only endpoint is `http://localhost:8010/sparql` and has 2 GET parameters
 - `query`: (str) The SPARQL query to execute
 - `remove_prefix`: (bool) Wether to remove the prefix before the names, ex: "http://prefix.example:Name" into "Name"
 
-# Python Backend
+# Client: Python Backend
 
-TODO
+TODO: Documentation of the python backend (fastapi).
 
-# Vue.js Client
+# Client: Vue.js Frontend
 
 The frontend of this app is a Vue.js app.
 
-Start it running in the `front/` directory:
-
+Start it running in the `client/front/` directory:
 ```bash
-npm i
 npm run dev
 ```
