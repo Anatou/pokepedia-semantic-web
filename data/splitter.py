@@ -41,7 +41,7 @@ def main():
 
         out_dir = Path(sys.argv[3])
 
-        with open(filepath.resolve(), "r") as file:
+        with open(filepath.resolve(), "r", encoding="utf-8") as file:
             lines = file.readlines()
             sep = len(lines)/N_PARTS
             for i, line in enumerate(lines):
@@ -51,7 +51,7 @@ def main():
                         break
 
         for part in range(N_PARTS):
-            with open(f"{out_dir.resolve()}/{filepath.stem}-{part+1}.{filepath.suffix}", "w") as file:
+            with open(f"{out_dir.resolve()}/{filepath.stem}-{part+1}.{filepath.suffix}", "w", encoding="utf-8") as file:
                 file.writelines(data[part])
         sys.exit(0)
 
