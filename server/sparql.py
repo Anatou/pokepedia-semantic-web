@@ -34,7 +34,7 @@ def load_pokegraph() -> Graph:
     print(f"Reading data from {N_PARTS} parts...", end="")
     data = ""
     for part in range(N_PARTS):
-        with open(f"{FILE}-part{part+1}.rdf", "r") as file:
+        with open(f"{FILE}-part{part+1}.rdf", "r", encoding="utf-8") as file:
             data += file.read()
     # Parse the data
     print("Loading RDF graph...", end="\r")
