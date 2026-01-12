@@ -67,3 +67,21 @@ objectifs :
 	ajout au graphe initial 
  - construire des tuples estfort, estfaible et les rajouter à la base
  	nouveau vocabulaire : wiki:avantage
+
+remplacement pour mettre les types au propre:
+
+1
+property:Premier_type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">
+property:Premier_type rdf:resource="&wiki;
+
+2
+</property:Premier_type>
+"/>
+
+3
+property:Second_type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">
+property:Second rdf:resource="&wiki;
+
+4
+</property:Second_type>
+"/>

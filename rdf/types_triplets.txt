@@ -1,7 +1,7 @@
-    <swivt:Subject rdf:about="wiki:Normal">
+    <swivt:Subject rdf:about="&wiki;Normal">
         <rdf:type rdf:resource="&wiki;Type"/>
     </swivt:Subject>
-    <swivt:Subject rdf:about="wiki:Feu">
+    <swivt:Subject rdf:about="&wiki;Feu">
         <rdf:type rdf:resource="&wiki;Type"/>
         <wiki:force rdf:resource="&wiki;Plante"/>
         <wiki:avantage rdf:resource="&wiki;Plante"/>
@@ -12,7 +12,7 @@
         <wiki:force rdf:resource="&wiki;Acier"/>
         <wiki:avantage rdf:resource="&wiki;Acier"/>
     </swivt:Subject>
-    <swivt:Subject rdf:about="wiki:Eau">
+    <swivt:Subject rdf:about="&wiki;Eau">
         <rdf:type rdf:resource="&wiki;Type"/>
         <wiki:force rdf:resource="&wiki;Feu"/>
         <wiki:avantage rdf:resource="&wiki;Feu"/>
@@ -21,14 +21,14 @@
         <wiki:force rdf:resource="&wiki;Roche"/>
         <wiki:avantage rdf:resource="&wiki;Roche"/>
     </swivt:Subject>
-    <swivt:Subject rdf:about="wiki:Électrique">
+    <swivt:Subject rdf:about="&wiki;Électrique">
         <rdf:type rdf:resource="&wiki;Type"/>
         <wiki:force rdf:resource="&wiki;Eau"/>
         <wiki:avantage rdf:resource="&wiki;Eau"/>
         <wiki:force rdf:resource="&wiki;Vol"/>
         <wiki:avantage rdf:resource="&wiki;Vol"/>
     </swivt:Subject>
-    <swivt:Subject rdf:about="wiki:Plante">
+    <swivt:Subject rdf:about="&wiki;Plante">
         <rdf:type rdf:resource="&wiki;Type"/>
         <wiki:force rdf:resource="&wiki;Eau"/>
         <wiki:avantage rdf:resource="&wiki;Eau"/>
@@ -37,7 +37,7 @@
         <wiki:force rdf:resource="&wiki;Roche"/>
         <wiki:avantage rdf:resource="&wiki;Roche"/>
     </swivt:Subject>
-    <swivt:Subject rdf:about="wiki:Glace">
+    <swivt:Subject rdf:about="&wiki;Glace">
         <rdf:type rdf:resource="&wiki;Type"/>
         <wiki:force rdf:resource="&wiki;Plante"/>
         <wiki:avantage rdf:resource="&wiki;Plante"/>
@@ -48,7 +48,7 @@
         <wiki:force rdf:resource="&wiki;Dragon"/>
         <wiki:avantage rdf:resource="&wiki;Dragon"/>
     </swivt:Subject>
-    <swivt:Subject rdf:about="wiki:Combat">
+    <swivt:Subject rdf:about="&wiki;Combat">
         <rdf:type rdf:resource="&wiki;Type"/>
         <wiki:force rdf:resource="&wiki;Normal"/>
         <wiki:avantage rdf:resource="&wiki;Normal"/>
@@ -61,14 +61,14 @@
         <wiki:force rdf:resource="&wiki;Acier"/>
         <wiki:avantage rdf:resource="&wiki;Acier"/>
     </swivt:Subject>
-    <swivt:Subject rdf:about="wiki:Poison">
+    <swivt:Subject rdf:about="&wiki;Poison">
         <rdf:type rdf:resource="&wiki;Type"/>
         <wiki:force rdf:resource="&wiki;Plante"/>
         <wiki:avantage rdf:resource="&wiki;Plante"/>
         <wiki:force rdf:resource="&wiki;Fée"/>
         <wiki:avantage rdf:resource="&wiki;Fée"/>
     </swivt:Subject>
-    <swivt:Subject rdf:about="wiki:Sol">
+    <swivt:Subject rdf:about="&wiki;Sol">
         <rdf:type rdf:resource="&wiki;Type"/>
         <wiki:force rdf:resource="&wiki;Feu"/>
         <wiki:avantage rdf:resource="&wiki;Feu"/>
@@ -81,7 +81,7 @@
         <wiki:force rdf:resource="&wiki;Acier"/>
         <wiki:avantage rdf:resource="&wiki;Acier"/>
     </swivt:Subject>
-    <swivt:Subject rdf:about="wiki:Vol">
+    <swivt:Subject rdf:about="&wiki;Vol">
         <rdf:type rdf:resource="&wiki;Type"/>
         <wiki:force rdf:resource="&wiki;Plante"/>
         <wiki:avantage rdf:resource="&wiki;Plante"/>
@@ -90,14 +90,14 @@
         <wiki:force rdf:resource="&wiki;Insecte"/>
         <wiki:avantage rdf:resource="&wiki;Insecte"/>
     </swivt:Subject>
-    <swivt:Subject rdf:about="wiki:Psy">
+    <swivt:Subject rdf:about="&wiki;Psy">
         <rdf:type rdf:resource="&wiki;Type"/>
         <wiki:force rdf:resource="&wiki;Combat"/>
         <wiki:avantage rdf:resource="&wiki;Combat"/>
         <wiki:force rdf:resource="&wiki;Poison"/>
         <wiki:avantage rdf:resource="&wiki;Poison"/>
     </swivt:Subject>
-    <swivt:Subject rdf:about="wiki:Insecte">
+    <swivt:Subject rdf:about="&wiki;Insecte">
         <rdf:type rdf:resource="&wiki;Type"/>
         <wiki:force rdf:resource="&wiki;Plante"/>
         <wiki:avantage rdf:resource="&wiki;Plante"/>
@@ -106,7 +106,7 @@
         <wiki:force rdf:resource="&wiki;Ténèbres"/>
         <wiki:avantage rdf:resource="&wiki;Ténèbres"/>
     </swivt:Subject>
-    <swivt:Subject rdf:about="wiki:Roche">
+    <swivt:Subject rdf:about="&wiki;Roche">
         <rdf:type rdf:resource="&wiki;Type"/>
         <wiki:force rdf:resource="&wiki;Feu"/>
         <wiki:avantage rdf:resource="&wiki;Feu"/>
@@ -117,26 +117,26 @@
         <wiki:force rdf:resource="&wiki;Insecte"/>
         <wiki:avantage rdf:resource="&wiki;Insecte"/>
     </swivt:Subject>
-    <swivt:Subject rdf:about="wiki:Spectre">
+    <swivt:Subject rdf:about="&wiki;Spectre">
         <rdf:type rdf:resource="&wiki;Type"/>
         <wiki:force rdf:resource="&wiki;Psy"/>
         <wiki:avantage rdf:resource="&wiki;Psy"/>
         <wiki:force rdf:resource="&wiki;Spectre"/>
         <wiki:avantage rdf:resource="&wiki;Spectre"/>
     </swivt:Subject>
-    <swivt:Subject rdf:about="wiki:Dragon">
+    <swivt:Subject rdf:about="&wiki;Dragon">
         <rdf:type rdf:resource="&wiki;Type"/>
         <wiki:force rdf:resource="&wiki;Dragon"/>
         <wiki:avantage rdf:resource="&wiki;Dragon"/>
     </swivt:Subject>
-    <swivt:Subject rdf:about="wiki:Ténèbres">
+    <swivt:Subject rdf:about="&wiki;Ténèbres">
         <rdf:type rdf:resource="&wiki;Type"/>
         <wiki:force rdf:resource="&wiki;Psy"/>
         <wiki:avantage rdf:resource="&wiki;Psy"/>
         <wiki:force rdf:resource="&wiki;Spectre"/>
         <wiki:avantage rdf:resource="&wiki;Spectre"/>
     </swivt:Subject>
-    <swivt:Subject rdf:about="wiki:Acier">
+    <swivt:Subject rdf:about="&wiki;Acier">
         <rdf:type rdf:resource="&wiki;Type"/>
         <wiki:force rdf:resource="&wiki;Glace"/>
         <wiki:avantage rdf:resource="&wiki;Glace"/>
@@ -145,7 +145,7 @@
         <wiki:force rdf:resource="&wiki;Fée"/>
         <wiki:avantage rdf:resource="&wiki;Fée"/>
     </swivt:Subject>
-    <swivt:Subject rdf:about="wiki:Fée">
+    <swivt:Subject rdf:about="&wiki;Fée">
         <rdf:type rdf:resource="&wiki;Type"/>
         <wiki:force rdf:resource="&wiki;Combat"/>
         <wiki:avantage rdf:resource="&wiki;Combat"/>
