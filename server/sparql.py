@@ -13,34 +13,32 @@ def fix_string_encoding(s: str, remove_prefix: bool) -> str:
 
 def fix_row_encoding(s: tuple[Node, Node, Node] | bool | ResultRow, remove_prefix: bool) -> str:
     if isinstance(s, ResultRow):
-        print("Got ResultRow !")
         res_dict = {}
         for key, value in s.asdict().items():
             res_dict[fix_string_encoding(key, remove_prefix)] = fix_string_encoding(value, remove_prefix)
         return res_dict
     elif isinstance(s, tuple):
-        print("Got tuple !")
         return (fix_string_encoding(s[0], remove_prefix), fix_string_encoding(s[1], remove_prefix), fix_string_encoding(s[2], remove_prefix))
     else:
-        print(f"Got other ({type(s)}) !")
         return s
 
 def load_pokegraph() -> Graph:
     # Guess the number of parts
+    FILE = "../data/pokepedia-fr_rdfdump20150715"
     N_PARTS = 1
-    while Path(f"../data/pokepedia-fr_rdfdump20150715-part{N_PARTS}.rdf").exists():
+    while Path(f"{FILE}-part{N_PARTS}.rdf").exists():
         N_PARTS += 1
     N_PARTS -= 1
 
     # Load the data
-    print(f"Reading data from {N_PARTS}...", end="\r")
+    print(f"Reading data from {N_PARTS} parts...", end="")
     data = ""
     for part in range(N_PARTS):
-        with open(f"../data/pokepedia-fr_rdfdump20150715-part{part+1}.rdf", "r") as file:
+        with open(f"{FILE}-part{part+1}.rdf", "r") as file:
             data += file.read()
     # Parse the data
     print("Loading RDF graph...", end="\r")
     g = Graph()
     g.parse(data=data, format="application/rdf+xml")
-    print(f"RDF graph ready with {len(g)} triplets !")
+    print(f"RDF graph ready with {len(g)} triplets !                                                                ")
     return g

@@ -26,6 +26,6 @@ WHERE {
 ORDER BY asc(?num)
 """
 
-res = requests.get("http://127.0.0.1:8000/sparql", params={"query": q, "remove_prefix": True})
+res = requests.get("http://localhost:8010/sparql", params={"query": q, "remove_prefix": True})
 for row in json_loads(res.text):
     print(row)

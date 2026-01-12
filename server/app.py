@@ -1,7 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from sparql import fix_row_encoding, load_pokegraph
 
-# uvicorn app:app --reload
+# Lancer en étant dans le dossier server avec
+# uvicorn app:app --port 8010
+
 # Create FastAPI app instance
 app = FastAPI()
 g = load_pokegraph()
@@ -10,7 +12,10 @@ g = load_pokegraph()
 @app.get("/sparql")
 def exec_sparql(query: str = "", remove_prefix: bool = False):
     if query == "":
-        return ["Empty query"]
+        raise HTTPException(
+            status_code=400,
+            detail="Query string must not be empty"
+        )
     
     try:
         res = []
@@ -18,4 +23,7 @@ def exec_sparql(query: str = "", remove_prefix: bool = False):
             res.append(fix_row_encoding(r, remove_prefix))
         return res
     except BaseException as e:
-        return [f"An internal error occured: {e}"]
+        raise HTTPException(
+            status_code=500,
+            detail=f"An internal error occured: {e}"
+        )
