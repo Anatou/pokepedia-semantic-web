@@ -20,3 +20,15 @@ uvicorn app:app --port 8010
 The only endpoint is `http://localhost:8010/sparql` and has 2 GET parameters 
 - `query`: (str) The SPARQL query to execute
 - `remove_prefix`: (bool) Wether to remove the prefix before the names, ex: "http://prefix.example:Name" into "Name"
+
+
+# Vue.js Client
+
+The frontend of this app is a Vue.js app.
+
+Start it running in the `front/` directory:
+
+```bash
+npm i
+npm run dev
+```
