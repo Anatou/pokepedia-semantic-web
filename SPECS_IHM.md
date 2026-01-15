@@ -1,6 +1,9 @@
 
-côté back :
-1. appeler l'endpoint sparql pour obtenir des infos sur les pokemon et les transmettre au front :
+# Côté back
+
+Appeler l'endpoint sparql pour obtenir des infos sur les pokemon et les transmettre au front :
+
+̏```rdf
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX property: <http://www.pokepedia.fr/Sp%C3%A9cial:URIResolver/Attribut-3A> 
@@ -23,8 +26,11 @@ WHERE {
 	FILTER( !regex(str(?pk), "Utilisateur"))
 }
 ORDER BY asc(?num)
+```
 
-2. appeler l'endpoint quand un pokemon est selectionné pour obtenir la liste de ceux sur lesquels on a le coverage 
+Appeler l'endpoint quand un pokemon est selectionné pour obtenir la liste de ceux sur lesquels on a le coverage
+ 
+```rdf
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX property: <http://www.pokepedia.fr/Sp%C3%A9cial:URIResolver/Attribut-3A> 
@@ -37,10 +43,10 @@ SELECT ?pk
 WHERE { 
 	wiki:{pokemon_selectionné} wiki:avantage ?pk
 }
+```
 
 
-
-côté front :
+# Côté front
 1. au chargement récupérer toutes les infos sur les pokemon, créer un node pour chaque pokemon
 2. dans le détail des nodes mettre un lien vers la page du pokemon : https://www.pokepedia.fr/Pokemon
 3. avoir plusieurs modes d'affichage 
@@ -48,3 +54,39 @@ côté front :
     - groupé par famille avec un node par famille
     - groupé par génération avec un node par génération
 4. permettre de sélectionner une équipe de pokémon (de 1 à 6). lorsqu'un pokemon est sélectionné le back renvoie tous les pokemon à mettre en surbrillance (ceux sur lesquels on a désormais l'avantage)
+
+
+# Endpoints backend
+
+## GET /pokemons
+
+```json
+{
+	"pokemons": [
+		{
+			"num": "56",
+			"pk": "234245",
+			"type1": "eau",
+			"type2": "feu",
+			"gen": "Gen A",
+			"famille": "famille A",
+			"url": "https://www.pokepedia.fr/Zygarde"
+		},
+		{
+			
+		}
+	]
+}
+```
+
+## GET /pokemon/[pk]/coverage
+
+```json
+{
+	"coverage": [
+		"pk1",
+		"pk2",
+		"pk3"
+	]
+}
+```
