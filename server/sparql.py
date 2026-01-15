@@ -24,9 +24,9 @@ def fix_row_encoding(s: tuple[Node, Node, Node] | bool | ResultRow, remove_prefi
 
 def load_pokegraph() -> Graph:
     # Guess the number of parts
-    FILE = "../data/pokepedia-fr_rdfdump20150715"
+    FILE = "../data/modified_graph"
     N_PARTS = 1
-    while Path(f"{FILE}-part{N_PARTS}.rdf").exists():
+    while Path(f"{FILE}-{N_PARTS}.rdf").exists():
         N_PARTS += 1
     N_PARTS -= 1
 
@@ -34,7 +34,7 @@ def load_pokegraph() -> Graph:
     print(f"Reading data from {N_PARTS} parts...", end="")
     data = ""
     for part in range(N_PARTS):
-        with open(f"{FILE}-part{part+1}.rdf", "r", encoding="utf-8") as file:
+        with open(f"{FILE}-{part+1}.rdf", "r", encoding="utf-8") as file:
             data += file.read()
     # Parse the data
     print("Loading RDF graph...", end="\r")
