@@ -1,2 +1,4 @@
 rdf/*.rdf
 *.local.*
+server/__pycache__
+data/__pycache__

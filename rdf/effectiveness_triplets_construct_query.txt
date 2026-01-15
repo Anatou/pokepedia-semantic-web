@@ -1,3 +1,7 @@
+Ce fichier contient la requete sparql permettant de construire un graphe des relations de forces/faiblesses entre pokemon.
+Son résultat est stocké dans effectiveness_relationships.rdf
+
+
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX property: <http://www.pokepedia.fr/Sp%C3%A9cial:URIResolver/Attribut-3A> 
@@ -50,7 +54,7 @@ WHERE {
 
         ?pkmn_faible property:Num-C3-A9ro_National ?numString_faible.
         ?pkmn_faible property:Premier_type ?type1_faible.
-        OPTIONAL { ?pkmn_faible property:Second_type ?type2_faible. }
+        ?pkmn_faible property:Second_type ?type2_faible.
         ?pkmn_faible rdfs:isDefinedBy ?url_faible.
         ?pkmn_faible property:Famille ?famille_faible.
         ?pkmn_faible property:G-C3-A9n-C3-A9ration_du_Pok-C3-A9mon ?gen_faible
@@ -65,7 +69,7 @@ WHERE {
     {
         ?pk property:Num-C3-A9ro_National ?numString.
         ?pk property:Premier_type ?type1.
-        OPTIONAL { ?pk property:Second_type ?type2. }
+        ?pk property:Second_type ?type2.
         ?pk rdfs:isDefinedBy ?url.
         ?pk property:Famille ?famille.
         ?pk property:G-C3-A9n-C3-A9ration_du_Pok-C3-A9mon ?gen
@@ -91,7 +95,7 @@ WHERE {
     {
         ?pk property:Num-C3-A9ro_National ?numString.
         ?pk property:Premier_type ?type1.
-        OPTIONAL { ?pk property:Second_type ?type2. }
+        ?pk property:Second_type ?type2.
         ?pk rdfs:isDefinedBy ?url.
         ?pk property:Famille ?famille.
         ?pk property:G-C3-A9n-C3-A9ration_du_Pok-C3-A9mon ?gen
@@ -102,7 +106,7 @@ WHERE {
 
         ?pkmn_faible property:Num-C3-A9ro_National ?numString_faible.
         ?pkmn_faible property:Premier_type ?type1_faible.
-        OPTIONAL { ?pkmn_faible property:Second_type ?type2_faible. }
+        ?pkmn_faible property:Second_type ?type2_faible.
         ?pkmn_faible rdfs:isDefinedBy ?url_faible.
         ?pkmn_faible property:Famille ?famille_faible.
         ?pkmn_faible property:G-C3-A9n-C3-A9ration_du_Pok-C3-A9mon ?gen_faible
