@@ -1,11 +1,25 @@
 from fastapi import FastAPI, HTTPException
 from get_pokemons import get_pokemons
 from get_pokemon_coverage import get_pokemon_coverage
+from fastapi.middleware.cors import CORSMiddleware
 
 # Lancer en étant dans le dossier server avec
 # uvicorn app:app --port 8010
 app = FastAPI()
 
+
+
+origins = [
+    "*",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/pokemons")
 def exec_sparql(remove_prefix: bool = True):
