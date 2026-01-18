@@ -1,7 +1,37 @@
 <script setup lang="ts">
-import {onMounted, ref, watch} from "vue";
-import {Network} from 'vue3-visjs'
-import type {Edge, Node, Pokemon, GroupType} from "@/types/types.ts";
+import { onMounted, ref, watch } from "vue";
+import { Network } from 'vue3-visjs'
+import type { Edge, Node, Pokemon, GroupType } from "@/types/types.ts";
+import type { Network as VisNetwork } from "vis-network";
+const network = ref<InstanceType<typeof Network> | null>(null);
+
+const onClickZoom = (params: any) => {
+  const vis = network.value?.network;
+  if (!vis) return;
+
+
+  // clic dans le vide → reset vue
+  if (!params.nodes || params.nodes.length === 0) {
+    vis.fit({
+      animation: { duration: 400, easingFunction: "easeInOutQuad" }
+    });
+    return;
+  }
+
+
+  const nodeId = params.nodes[0];
+  const isGroup = nodeId >= 100000;
+
+
+  vis.focus(nodeId, {
+    scale: isGroup ? 1.2 : 1.8,
+    animation: {
+      duration: 500,
+      easingFunction: "easeInOutQuad"
+    }
+  });
+};
+
 
 const props = defineProps<{
   pokemons: Pokemon[],
@@ -9,9 +39,13 @@ const props = defineProps<{
   groupType: GroupType,
 }>();
 
+const emit = defineEmits<{
+  (e: 'pokemonSelected', pokemon: Pokemon | null): void
+}>();
 
 const nodes = ref<Node[]>();
 const edges = ref<Edge[]>();
+
 const computeGraph = () => {
   const groupsToId = new Map<string, number>();
   let nodesBuilder: Node[] = [];
@@ -26,7 +60,7 @@ const computeGraph = () => {
   filteredPokemons.forEach(p => {
     // Add pokemon node
     nodesBuilder.push({
-      id: p.num,
+      id: p.pk,
       label: p.pk
     });
 
@@ -112,7 +146,7 @@ const computeGraph = () => {
       if (groupNodeId !== undefined) {
         edgesBuilder.push({
           id: p.num * 10,
-          from: p.num,
+          from: p.pk,
           to: groupNodeId,
         });
       }
@@ -121,7 +155,7 @@ const computeGraph = () => {
       if (groupNodeId !== undefined) {
         edgesBuilder.push({
           id: p.num * 10,
-          from: p.num,
+          from: p.pk,
           to: groupNodeId,
         });
       }
@@ -131,14 +165,14 @@ const computeGraph = () => {
       if (type1NodeId !== undefined) {
         edgesBuilder.push({
           id: p.num * 10,
-          from: p.num,
+          from: p.pk,
           to: type1NodeId,
         });
       }
       if (type2NodeId !== undefined) {
         edgesBuilder.push({
           id: p.num * 10 + 1,
-          from: p.num,
+          from: p.pk,
           to: type2NodeId,
         });
       }
@@ -147,7 +181,7 @@ const computeGraph = () => {
       if (groupNodeId !== undefined) {
         edgesBuilder.push({
           id: p.num * 10,
-          from: p.num,
+          from: p.pk,
           to: groupNodeId,
         });
       }
@@ -156,7 +190,7 @@ const computeGraph = () => {
       if (groupNodeId !== undefined) {
         edgesBuilder.push({
           id: p.num * 10,
-          from: p.num,
+          from: p.pk,
           to: groupNodeId,
         });
       }
@@ -169,26 +203,6 @@ const computeGraph = () => {
 onMounted(computeGraph)
 watch(() => [props.pokemons, props.filter, props.groupType], computeGraph, { deep: true })
 
-
-const networkEvents = ref('')
-const networkEvent = (eventName: string) => {
-  if (networkEvents.value.length > 500) networkEvents.value = '';
-  networkEvents.value += `${eventName}, `;
-}
-const networkNodes = ref([
-  {id: 1, label: 'Node 1'},
-  {id: 2, label: 'Node 2'},
-  {id: 3, label: 'Node 3'},
-  {id: 4, label: 'Node 4'},
-  {id: 5, label: 'Node 5'},
-])
-const networkEdges = ref([
-  // {id: 1, from: 1, to: 3},
-  // {id: 2, from: 1, to: 2},
-  // {id: 3, from: 2, to: 4},
-  // {id: 4, from: 2, to: 5},
-  // {id: 5, from: 3, to: 3},
-])
 const networkOptions = ref({
   nodes: {
     shape: 'circle',
@@ -196,113 +210,36 @@ const networkOptions = ref({
   layout: {
     improvedLayout: true
   }
-})
+});
 
-
-function addNode() {
-  const id = Date.now();
-  //networkValue.value.nodes.push({ id, label: 'New node' });
-  // $refs.network.network.body.emitter.emit("_dataChanged");
-}
-
-function addEdge() {
-  const n1 = Math.floor(Math.random() * networkNodes.value.length);
-  const n2 = Math.floor(Math.random() * networkNodes.value.length);
-  if (networkNodes.value[n1] && networkNodes.value[n2]) {
-    networkEdges.value.push({
-      id: Date.now(),
-      from: networkNodes.value[n1].id,
-      to: networkNodes.value[n2].id,
-    });
+function onNodeClick(event: { nodes: string[] }) {
+  const selectedNodeId = event.nodes[0];
+  if (selectedNodeId) {
+    const foundPokemon = props.pokemons.find(p => p.pk === selectedNodeId);
+    if (foundPokemon) {
+      emit('pokemonSelected', foundPokemon);
+    }
+  } else {
+    // Si on clique en dehors d'un noeud, on désélectionne
+    emit('pokemonSelected', null);
   }
-}
-
-function resetNetwork() {
-  networkNodes.value = [
-    {id: 1, label: 'Node 1'},
-    {id: 2, label: 'Node 2'},
-    {id: 3, label: 'Node 3'},
-    {id: 4, label: 'Node 4'},
-    {id: 5, label: 'Node 5'}
-  ];
-  networkEdges.value = [
-    {id: 1, from: 1, to: 3},
-    {id: 2, from: 1, to: 2},
-    {id: 3, from: 2, to: 4},
-    {id: 4, from: 2, to: 5},
-    {id: 5, from: 3, to: 3}
-  ];
-}
-
-function removeNode() {
-  networkNodes.value.splice(0, 1);
-}
-
-function removeEdge() {
-  networkEdges.value.splice(0, 1);
 }
 
 </script>
 
 <template>
   <div class="graph">
-    <network
+    <Network
       class="network"
       ref="network"
+
       :nodes="nodes"
       :edges="edges"
       :options="networkOptions"
-      @click="networkEvent('click')"
-      @double-click="networkEvent('doubleClick')"
-      @oncontext="networkEvent('oncontext')"
-      @hold="networkEvent('hold')"
-      @release="networkEvent('release')"
-      @select="networkEvent('select')"
-      @select-node="networkEvent('selectNode')"
-      @select-edge="networkEvent('selectEdge')"
-      @deselect-node="networkEvent('deselectNode')"
-      @deselect-edge="networkEvent('deselectEdge')"
-      @drag-start="networkEvent('dragStart')"
-      @dragging="networkEvent('dragging')"
-      @drag-end="networkEvent('dragEnd')"
-      @hover-node="networkEvent('hoverNode')"
-      @blur-node="networkEvent('blurNode')"
-      @hover-edge="networkEvent('hoverEdge')"
-      @blur-edge="networkEvent('blurEdge')"
-      @zoom="networkEvent('zoom')"
-      @show-popup="networkEvent('showPopup')"
-      @hide-popup="networkEvent('hidePopup')"
-      @start-stabilizing="networkEvent('startStabilizing')"
-      @stabilization-progress="networkEvent('stabilizationProgress')"
-      @stabilization-iterations-done="networkEvent('stabilizationIterationsDone')"
-      @stabilized="networkEvent('stabilized')"
-      @resize="networkEvent('resize')"
-      @init-redraw="networkEvent('initRedraw')"
-      @before-drawing="networkEvent('beforeDrawing')"
-      @after-drawing="networkEvent('afterDrawing')"
-      @animation-finished="networkEvent('animationFinished')"
-      @config-change="networkEvent('configChange')"
-      @nodes-mounted="networkEvent('nodes-mounted')"
-      @nodes-add="networkEvent('nodes-add')"
-      @nodes-update="networkEvent('nodes-update')"
-      @nodes-remove="networkEvent('nodes-remove')"
-      @edges-mounted="networkEvent('edges-mounted')"
-      @edges-add="networkEvent('edges-add')"
-      @edges-update="networkEvent('edges-update')"
-      @edges-remove="networkEvent('edges-remove')">
-    </network>
-
-    <!--    <button @click="addNode">Add node</button>-->
-    <!--    <button @click="addEdge">Add edge</button>-->
-    <!--    <button @click="resetNetwork">Reset Network</button>-->
-    <!--    <button @click="removeNode">Remove Node</button>-->
-    <!--    <button @click="removeEdge">Remove Edge</button>-->
-    <!--    <div class="events">-->
-    <!--      <p>-->
-    <!--        Network events: <br/>-->
-    <!--        {{ networkEvents }}-->
-    <!--      </p>-->
-    <!--    </div>-->
+      @select-node="onNodeClick"
+      @double-click="onClickZoom"
+      @deselect-node="() => emit('pokemonSelected', null)"
+    />
   </div>
 </template>
 

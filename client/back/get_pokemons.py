@@ -8,15 +8,21 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 def get_pokemons(remove_prefix : bool):
 
     query = """
+    PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
     SELECT ?num ?pk ?type1 ?type2 ?gen ?famille ?url 
     WHERE { 
         ?pk property:Num-C3-A9ro_National ?numString.
         ?pk property:Premier_type ?type1.
         OPTIONAL { ?pk property:Second_type ?type2. }
-        ?pk rdfs:isDefinedBy ?url.
         ?pk property:Famille ?famille.
-        ?pk property:G-C3-A9n-C3-A9ration_du_Pok-C3-A9mon ?gen
-        BIND( xsd:integer(?numString) AS ?num)
+        ?pk property:G-C3-A9n-C3-A9ration_du_Pok-C3-A9mon ?gen.
+
+        # On construit l'URL Poképédia directement à partir de ?pk (qui est le nom)
+        BIND(CONCAT("https://www.pokepedia.fr/", STR(?pk)) AS ?url)
+
+        BIND(xsd:integer(?numString) AS ?num)
         FILTER( ?num > 0 )
         FILTER( !regex(str(?pk), "Projet"))
         FILTER( !regex(str(?pk), "Utilisateur"))
