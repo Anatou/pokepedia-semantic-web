@@ -1,11 +1,12 @@
 export interface Pokemon {
-  num: number,
-  pk: string,
-  type1: string,
-  type2?: string,
-  gen: string,
-  famille: string,
-  url: string
+    num: number;
+    pk: string;
+    type1: string;
+    type2?: string;
+    gen: string;
+    famille: string;
+    url: string;
+    image?: string;
 }
 
 export interface Node {
@@ -19,4 +20,4 @@ export interface Edge {
   to: number
 }
 
-export type GroupType = 'type1' | 'type2' | 'all-types' | 'generation' | 'famille' | 'none';
+export type GroupType = 'type1' | 'gen' | 'famille';

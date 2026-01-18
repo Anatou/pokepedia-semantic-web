@@ -11,7 +11,7 @@ def get_pokemons(remove_prefix : bool):
     PREFIX foaf: <http://xmlns.com/foaf/0.1/>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-    SELECT ?num ?pk ?type1 ?type2 ?gen ?famille ?url 
+    SELECT ?num ?pk ?type1 ?type2 ?gen ?famille ?url ?image
     WHERE { 
         ?pk property:Num-C3-A9ro_National ?numString.
         ?pk property:Premier_type ?type1.
@@ -21,6 +21,9 @@ def get_pokemons(remove_prefix : bool):
 
         # On construit l'URL Poképédia directement à partir de ?pk (qui est le nom)
         BIND(CONCAT("https://www.pokepedia.fr/", STR(?pk)) AS ?url)
+
+        # On construit l'URL de l'image à partir du numéro national
+        BIND(CONCAT("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/", ?numString, ".png") AS ?image)
 
         BIND(xsd:integer(?numString) AS ?num)
         FILTER( ?num > 0 )

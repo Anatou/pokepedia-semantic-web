@@ -10,7 +10,13 @@ defineProps<{
 <template>
   <aside class="w-[300px] bg-gray-800 text-white p-4 flex-shrink-0 overflow-y-auto">
     <div v-if="selectedPokemon">
-      <h2 class="text-2xl font-bold mb-4">{{ selectedPokemon.pk }}</h2>
+      <img 
+        v-if="selectedPokemon.image" 
+        :src="selectedPokemon.image" 
+        :alt="'Image de ' + selectedPokemon.pk"
+        class="w-32 h-32 mx-auto mb-4 rounded-full bg-gray-700"
+      >
+      <h2 class="text-2xl font-bold mb-4 text-center">{{ selectedPokemon.pk }}</h2>
       <div class="space-y-2">
         <p><strong>Numéro National:</strong> #{{ selectedPokemon.num }}</p>
         <p><strong>Type 1:</strong> {{ selectedPokemon.type1 }}</p>
