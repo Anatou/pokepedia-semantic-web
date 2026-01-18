@@ -63,7 +63,7 @@ const handleHighlightCoverage = async () => {
         :disabled="isLoadingCoverage"
         class="w-full mt-6 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-bold py-2 px-4 rounded transition-colors"
       >
-        {{ isLoadingCoverage ? 'Chargement...' : 'Afficher Couverture' }}
+        {{ isLoadingCoverage ? 'Chargement...' : "Afficher les pokémons qu'il peut battre" }}
       </button>
     </div>
     <div v-else class="text-gray-400 text-center pt-10">
