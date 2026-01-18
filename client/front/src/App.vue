@@ -9,10 +9,15 @@ const pokemons = ref<Pokemon[]>();
 const filter = ref<string>("");
 const groupType = ref<GroupType>('type1');
 const selectedPokemon = ref<Pokemon | null>(null);
+const highlightedPokemons = ref<string[]>([]);
 
 function handlePokemonSelected(pokemon: Pokemon | null) {
   selectedPokemon.value = pokemon;
 }
+
+function handleHighlightCoverage(pokemonNames: string[]) {
+  highlightedPokemons.value = pokemonNames;
+  }
 
 onMounted(() => {
   fetch("http://localhost:8020/pokemons").then((r) => {
@@ -39,10 +44,11 @@ onMounted(() => {
       :pokemons="pokemons"
       :filter="filter"
       :group-type="groupType"
+      :highlighted-pokemons="highlightedPokemons"
       @pokemon-selected="handlePokemonSelected"
     />
     <div v-else>Chargement des pokemons...</div>
-    <Sidebar :selected-pokemon="selectedPokemon" />
+    <Sidebar :selected-pokemon="selectedPokemon" @highlight-coverage="handleHighlightCoverage" />
   </main>
 </template>
 

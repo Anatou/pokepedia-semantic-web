@@ -37,6 +37,7 @@ const props = defineProps<{
   pokemons: Pokemon[],
   filter: string,
   groupType: GroupType,
+  highlightedPokemons: string[],
 }>();
 
 const emit = defineEmits<{
@@ -202,6 +203,57 @@ const computeGraph = () => {
 
 onMounted(computeGraph)
 watch(() => [props.pokemons, props.filter, props.groupType], computeGraph, { deep: true })
+watch(
+  () => props.highlightedPokemons,
+  (highlighted) => {
+    const vis = network.value?.network;
+    if (!vis) {
+      return;
+    }
+    
+
+    const nodesDS = vis.body.data.nodes;
+    const existingIds = new Set(nodesDS.getIds());
+
+    
+    // 🔑 NORMALISATION
+    const idsToHighlight = highlighted.map(h =>
+      typeof h === 'string' ? h : h.pk
+    );
+
+    // Reset couleurs
+    existingIds.forEach(pk => {
+     
+        nodesDS.update({
+          id: pk,
+          color:{
+            background: 'lightblue',
+            border: 'blue'
+          }
+        });
+        
+      
+    });
+
+    // Highlight
+    let count = 0;
+    idsToHighlight.forEach(pk => {
+      if (existingIds.has(pk)) {
+        nodesDS.update({
+          id: pk,
+          color: {
+            background: 'orange',
+            border: 'darkorange'
+          }
+        });
+        count++;
+      } else {
+      }
+    });
+    
+  },
+  { deep: true }
+);
 
 const networkOptions = ref({
   nodes: {

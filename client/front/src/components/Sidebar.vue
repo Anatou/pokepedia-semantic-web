@@ -1,10 +1,35 @@
 <script setup lang="ts">
 import type { Pokemon } from '@/types/types';
+import { ref } from 'vue';
 
-defineProps<{
+const { selectedPokemon } = defineProps<{
   selectedPokemon: Pokemon | null
 }>();
 
+const emit = defineEmits<{
+  (e: 'highlightCoverage', pokemonNames: string[]): void
+}>();
+
+const isLoadingCoverage = ref(false);
+
+const handleHighlightCoverage = async () => {
+  if (!selectedPokemon) return;
+  
+  isLoadingCoverage.value = true;
+  try {
+    const response = await fetch(`http://localhost:8020/pokemon/${selectedPokemon.pk}/coverage`);
+    if (!response.ok) throw new Error('Failed to fetch coverage');
+    
+    const data = await response.json();
+    // Assuming the API returns an object with pokemon names to highlight
+    const pokemonNames = data.coverage || [];
+    emit('highlightCoverage', pokemonNames);
+  } catch (error) {
+    alert('Erreur lors de la récupération de la couverture');
+  } finally {
+    isLoadingCoverage.value = false;
+  }
+};
 </script>
 
 <template>
@@ -33,6 +58,13 @@ defineProps<{
           Voir sur Poképédia ↗
         </a>
       </div>
+      <button
+        @click="handleHighlightCoverage"
+        :disabled="isLoadingCoverage"
+        class="w-full mt-6 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-bold py-2 px-4 rounded transition-colors"
+      >
+        {{ isLoadingCoverage ? 'Chargement...' : 'Afficher Couverture' }}
+      </button>
     </div>
     <div v-else class="text-gray-400 text-center pt-10">
       <p>Cliquez sur un Pokémon dans le graphe pour voir ses détails.</p>
