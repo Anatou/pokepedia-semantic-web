@@ -25,7 +25,63 @@ The only endpoint is `http://localhost:8010/sparql` and has 2 GET parameters
 
 # Client: Python Backend
 
-TODO: Documentation of the python backend (fastapi).
+
+The backend of this app is a FastAPI app.
+To run it, you need to start both SPARQL server.
+
+## server used for endpoints 
+```shell
+cd client/back
+uvicorn app:app --port 8020
+```
+
+You will use this server to make requests from the Vue.js frontend. 
+Supported endpoints are:
+- `/pokemons`: Get data about all pokemons in this format:
+```json
+{
+	"pokemons": [
+		{
+			"num": "56",
+			"pk": "234245",
+			"type1": "eau",
+			"type2": "feu",
+			"gen": "Gen A",
+			"famille": "famille A",
+			"url": "https://www.pokepedia.fr/Zygarde"
+		},
+		{
+			
+		}
+	]
+}
+
+```
+- `/pokemon/{pk}/coverage`: Gets the list of pokemons that the given pokemon has advantage over:
+```json
+{
+    "coverage": [
+        "pk1",
+        "pk2",
+        "pk3"
+    ]
+}
+```
+
+## server used for data fetching from SPARQL servers
+```shell
+cd server
+uvicorn app:app --port 8010
+```
+## Overall backend server pipeline
+
+```mermaid
+graph TD
+    A[Client Vue.js Frontend] -->|Requests data| B[Python Backend FastAPI]
+    B -->|Sends SPARQL queries| C[SPARQL Server FastAPI]
+    C -->|Returns query results| B
+    B -->|Sends data| A
+```
 
 # Client: Vue.js Frontend
 
