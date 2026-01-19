@@ -10,6 +10,13 @@ def generate_types_triplets():
             output.write(f"""        <rdf:type rdf:resource="&wiki;Type"/>\n""")
             for type, multiplicator in types.items():
                 if multiplicator == 2:
-                    output.write(f"""        <wiki:force rdf:resource="&wiki;{type}"/>\n""")    #question de vocabulaire
                     output.write(f"""        <wiki:avantage rdf:resource="&wiki;{type}"/>\n""")
+                elif multiplicator == 0.5:
+                    output.write(f"""        <wiki:faiblesse rdf:resource="&wiki;{type}"/>\n""")
+                elif multiplicator == 0:
+                    output.write(f"""        <wiki:inefficace rdf:resource="&wiki;{type}"/>\n""")
             output.write(f"""    </swivt:Subject>\n""")
+
+
+if __name__ == "__main__" :
+    generate_types_triplets()

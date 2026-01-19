@@ -1,3 +1,6 @@
+import subprocess
+
+outputfilename="complete-pokemon-graph"
 
 #1. generate type advantages triplets
 from add_types_tuples_query_builder import generate_types_triplets
@@ -28,6 +31,15 @@ graph_string = graph_string.replace("""property:Second_type rdf:datatype="http:/
 graph_string = graph_string.replace("""</property:Second_type>""", """"/>""")
 
 
+#4. replace incoherent data
+graph_string.replace(
+    """		<property:Famille rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Chenapan&lt;span class="explain" title="Forme Enchaînée"&gt;*&lt;/span&gt;&lt;br /&gt;Djinn&lt;span class="explain" title="Forme Déchaînée"&gt;*&lt;/span&gt;</property:Famille>""",
+    """		<property:Famille rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Chenapan</property:Famille>"""                 )
+
+
 # save graph
-with open("rdf/modified_graph.rdf", "w", encoding="utf-8") as output:
+with open(f"rdf/{outputfilename}.rdf", "w", encoding="utf-8") as output:
     output.write(graph_string)
+
+# # split graph 
+# subprocess.run("python", "rdf/splitter.py", f"rdf/{outputfilename}.rdf", 4, "rdf")

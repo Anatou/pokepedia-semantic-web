@@ -24,7 +24,7 @@ def fix_row_encoding(s: tuple[Node, Node, Node] | bool | ResultRow, remove_prefi
 
 def load_pokegraph() -> Graph:
     # Guess the number of parts
-    FILE = "../data/modified_graph"
+    FILE = "../data/complete-pokemon-graph"
     N_PARTS = 1
     while Path(f"{FILE}-{N_PARTS}.rdf").exists():
         N_PARTS += 1
