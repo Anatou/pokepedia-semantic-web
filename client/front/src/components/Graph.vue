@@ -37,7 +37,8 @@ const props = defineProps<{
   pokemons: Pokemon[],
   filter: string,
   groupType: GroupType,
-  highlightedPokemons: string[],
+  highlightedPokemonsCoverage: string[],
+  highlightedPokemonsDisadvantage: string[]
 }>();
 
 const emit = defineEmits<{
@@ -73,7 +74,11 @@ const computeGraph = () => {
       if (!groupsToId.has(p.type1)) {
         nodesBuilder.push({
           id: groupId,
-          label: p.type1
+          label: p.type1,
+          color: {
+            background: 'lightgray',
+            border: 'gray'
+          }
         });
         groupsToId.set(p.type1, groupId);
         groupId++;
@@ -83,7 +88,11 @@ const computeGraph = () => {
         if (!groupsToId.has(p.type2)) {
           nodesBuilder.push({
             id: groupId,
-            label: p.type2
+            label: p.type2,
+            color: {
+            background: 'lightgray',
+            border: 'gray'
+          }
           });
           groupsToId.set(p.type2, groupId);
           groupId++;
@@ -94,7 +103,11 @@ const computeGraph = () => {
       if (!groupsToId.has(p.type1)) {
         nodesBuilder.push({
           id: groupId,
-          label: p.type1
+          label: p.type1,
+          color: {
+            background: 'lightgray',
+            border: 'gray'
+          }
         });
         groupsToId.set(p.type1, groupId);
         groupId++;
@@ -103,7 +116,11 @@ const computeGraph = () => {
         if (!groupsToId.has(p.type2)) {
           nodesBuilder.push({
             id: groupId,
-            label: p.type2
+            label: p.type2,
+            color: {
+            background: 'lightgray',
+            border: 'gray'
+          }
           });
           groupsToId.set(p.type2, groupId);
           groupId++;
@@ -113,7 +130,11 @@ const computeGraph = () => {
       if (!groupsToId.has(p.gen)) {
         nodesBuilder.push({
           id: groupId,
-          label: p.gen
+          label: p.gen,
+          color: {
+            background: 'lightgray',
+            border: 'gray'
+          }
         });
         groupsToId.set(p.gen, groupId);
         groupId++;
@@ -122,7 +143,11 @@ const computeGraph = () => {
       if (!groupsToId.has(p.famille)) {
         nodesBuilder.push({
           id: groupId,
-          label: p.famille
+          label: p.famille,
+          color: {
+            background: 'lightgray',
+            border: 'gray'
+          }
         });
         groupsToId.set(p.famille, groupId);
         groupId++;
@@ -204,7 +229,7 @@ const computeGraph = () => {
 onMounted(computeGraph)
 watch(() => [props.pokemons, props.filter, props.groupType], computeGraph, { deep: true })
 watch(
-  () => props.highlightedPokemons,
+  () => props.highlightedPokemonsCoverage,
   (highlighted) => {
     const vis = network.value?.network;
     if (!vis) {
@@ -216,7 +241,7 @@ watch(
     const existingIds = new Set(nodesDS.getIds());
 
     
-    // 🔑 NORMALISATION
+    // NORMALISATION
     const idsToHighlight = highlighted.map(h =>
       typeof h === 'string' ? h : h.pk
     );
@@ -242,8 +267,59 @@ watch(
         nodesDS.update({
           id: pk,
           color: {
-            background: 'orange',
-            border: 'darkorange'
+            background: 'greenyellow',
+            border: 'darkgreen'
+          }
+        });
+        count++;
+      } else {
+      }
+    });
+    
+  },
+  { deep: true }
+);
+watch(
+  () => props.highlightedPokemonsDisadvantage,
+  (highlighted) => {
+    const vis = network.value?.network;
+    if (!vis) {
+      return;
+    }
+    
+
+    const nodesDS = vis.body.data.nodes;
+    const existingIds = new Set(nodesDS.getIds());
+
+    
+    // NORMALISATION
+    const idsToHighlight = highlighted.map(h =>
+      typeof h === 'string' ? h : h.pk
+    );
+
+    // Reset couleurs
+    existingIds.forEach(pk => {
+     
+        nodesDS.update({
+          id: pk,
+          color:{
+            background: 'lightblue',
+            border: 'blue'
+          }
+        });
+        
+      
+    });
+
+    // Highlight
+    let count = 0;
+    idsToHighlight.forEach(pk => {
+      if (existingIds.has(pk)) {
+        nodesDS.update({
+          id: pk,
+          color: {
+            background: 'red',
+            border: 'darkred'
           }
         });
         count++;

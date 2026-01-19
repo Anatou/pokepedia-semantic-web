@@ -2,7 +2,7 @@ import requests
 import logging
 
 
-def get_pokemon_coverage(pk_selected: str, remove_prefix: bool):
+def get_pokemon_disadvantage(pk_selected: str, remove_prefix: bool):
     # on encode les caractères spéciaux dans la pk
     pk_encoded = requests.utils.quote(pk_selected, safe='')
     # on remplace les % dans la pk par des tirets pour match ce qui est dans la base
@@ -17,7 +17,7 @@ def get_pokemon_coverage(pk_selected: str, remove_prefix: bool):
             PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
             SELECT ?pk
             WHERE {{
-                wiki:{pk_selected} wiki:avantage ?pk .
+                ?pk wiki:avantage wiki:{pk_selected}.
             }}
     """
     try:
