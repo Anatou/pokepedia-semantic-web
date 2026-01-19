@@ -51,7 +51,7 @@ def main():
                         break
 
         for part in range(N_PARTS):
-            with open(f"{out_dir.resolve()}/{filepath.stem}-{part+1}.{filepath.suffix}", "w", encoding="utf-8") as file:
+            with open(f"{out_dir.resolve()}/{filepath.stem}-{part+1}{filepath.suffix}", "w", encoding="utf-8") as file:
                 file.writelines(data[part])
         sys.exit(0)
 
