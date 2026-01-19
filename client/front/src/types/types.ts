@@ -20,4 +20,9 @@ export interface Edge {
   to: number
 }
 
-export type GroupType = 'type1' | 'gen' | 'famille';
+export type GroupType = 'type1' | 'type2' | 'all-types' | 'generation' | 'famille' | 'none';
+
+export type Coverage = {
+  advantages: string[],
+  disadvantages: string[]
+};

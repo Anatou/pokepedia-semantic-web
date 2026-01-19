@@ -2,22 +2,43 @@
 import Graph from './components/Graph.vue'
 import Sidebar from './components/Sidebar.vue'
 import Header from './components/Header.vue'
+import TeamBuilder from './components/TeamBuilder.vue' // Importer le nouveau composant
 import {ref, onMounted} from "vue";
-import type {Pokemon, GroupType} from "@/types/types.ts";
+import type {Pokemon, GroupType, Coverage} from "@/types/types.ts";
 
 const pokemons = ref<Pokemon[]>();
 const filter = ref<string>("");
 const groupType = ref<GroupType>('type1');
 const selectedPokemon = ref<Pokemon | null>(null);
-const highlightedPokemons = ref<string[]>([]);
+
+
+const coverage = ref<Coverage>({advantages: [], disadvantages: []});
+const team = ref<Pokemon[]>([]); // Ajout de la ref pour l'équipe
 
 function handlePokemonSelected(pokemon: Pokemon | null) {
+  console.log("Pokemon selected", pokemon)
   selectedPokemon.value = pokemon;
 }
+function handleUpdateCoverage(new_coverage: Coverage) {
+  console.log("updating coverage to ", new_coverage)
+  // Making sure there is no intersection between advantages and disadvantages,
+  // With the priority for advantage.
+  const advantagesSet = new Set(new_coverage.advantages);
+  coverage.value = {
+    advantages: new_coverage.advantages,
+    disadvantages: new_coverage.disadvantages.filter(d => !advantagesSet.has(d))
+  };
+}
 
-function handleHighlightCoverage(pokemonNames: string[]) {
-  highlightedPokemons.value = pokemonNames;
+function handleAddToTeam(pokemon: Pokemon) {
+  if (team.value.length < 6 && !team.value.some(p => p.pk === pokemon.pk)) {
+    team.value.push(pokemon);
   }
+}
+
+function handleRemoveFromTeam(pokemon: Pokemon) {
+  team.value = team.value.filter(p => p.pk !== pokemon.pk);
+}
 
 onMounted(() => {
   fetch("http://localhost:8020/pokemons").then((r) => {
@@ -44,11 +65,19 @@ onMounted(() => {
       :pokemons="pokemons"
       :filter="filter"
       :group-type="groupType"
-      :highlighted-pokemons="highlightedPokemons"
+      :coverage="coverage"
       @pokemon-selected="handlePokemonSelected"
     />
-    <div v-else>Chargement des pokemons...</div>
-    <Sidebar :selected-pokemon="selectedPokemon" @highlight-coverage="handleHighlightCoverage" />
+    <div class="grow" v-else>Chargement des pokemons...</div>
+    <div class="sidebar-container">
+      <Sidebar
+        :selected-pokemon="selectedPokemon"
+        :team="team"
+        @update-coverage="handleUpdateCoverage"
+        @add-to-team="handleAddToTeam"
+      />
+      <TeamBuilder :team="team" :pokemons="pokemons" @add-to-team="handleAddToTeam" @remove-from-team="handleRemoveFromTeam" />
+    </div>
   </main>
 </template>
 
@@ -64,6 +93,22 @@ main {
   background-color: gray;
 }
 main > * {
+  background-color: black;
+}
+
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow: hidden; /* Empêche le conteneur de déborder */
+}
+
+.sidebar-container > :first-child { /* Cible la Sidebar */
+  flex-grow: 1;
+  overflow-y: auto; /* Permet le défilement interne si nécessaire */
+}
+
+.sidebar-container > * {
   background-color: black;
 }
 </style>

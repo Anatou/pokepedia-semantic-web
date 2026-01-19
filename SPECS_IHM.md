@@ -90,3 +90,15 @@ WHERE {
 	]
 }
 ```
+
+## GET /pokemon/[pk]/disadvantage
+
+```json
+{
+	"disadvantage": [
+		"pk1",
+		"pk2",
+		"pk3"
+	]
+}
+```
