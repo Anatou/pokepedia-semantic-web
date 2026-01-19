@@ -68,7 +68,7 @@ li {
 }
 
 .remove-btn {
-  background-color: #dc3545;
+  background-color: #c01324;
   color: white;
   border: none;
   border-radius: 50%;

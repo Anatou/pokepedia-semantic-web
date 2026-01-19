@@ -19,13 +19,15 @@ def get_pokemons(remove_prefix : bool):
         ?pk property:Famille ?famille.
         ?pk property:G-C3-A9n-C3-A9ration_du_Pok-C3-A9mon ?gen.
 
+        # On convertit le numéro en entier pour supprimer les zéros en tête
+        BIND(xsd:integer(?numString) AS ?num)
+
         # On construit l'URL Poképédia directement à partir de ?pk (qui est le nom)
         BIND(CONCAT("https://www.pokepedia.fr/", STR(?pk)) AS ?url)
 
-        # On construit l'URL de l'image à partir du numéro national
-        BIND(CONCAT("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/", ?numString, ".png") AS ?image)
+        # On construit l'URL de l'image à partir du numéro national (converti en chaîne)
+        BIND(CONCAT("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/", STR(?num), ".png") AS ?image)
 
-        BIND(xsd:integer(?numString) AS ?num)
         FILTER( ?num > 0 )
         FILTER( !regex(str(?pk), "Projet"))
         FILTER( !regex(str(?pk), "Utilisateur"))
