@@ -31,10 +31,12 @@ graph_string = graph_string.replace("""property:Second_type rdf:datatype="http:/
 graph_string = graph_string.replace("""</property:Second_type>""", """"/>""")
 
 
-#4. replace incoherent data
-graph_string.replace(
+#4. replace incoherent data or invalid encoding
+graph_string = graph_string.replace(
     """		<property:Famille rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Chenapan&lt;span class="explain" title="Forme Enchaînée"&gt;*&lt;/span&gt;&lt;br /&gt;Djinn&lt;span class="explain" title="Forme Déchaînée"&gt;*&lt;/span&gt;</property:Famille>""",
-    """		<property:Famille rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Chenapan</property:Famille>"""                 )
+    """		<property:Famille rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Chenapan</property:Famille>"""
+    )
+graph_string = graph_string.replace("-C3-89", "E")
 
 
 # save graph
