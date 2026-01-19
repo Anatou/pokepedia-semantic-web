@@ -19,7 +19,7 @@ const team = ref<PokemonWithCoverage[]>([]); // Ajout de la ref pour l'équipe
 const coverageTeam = computed(() => {
   const advantagesSet = new Set<string>();
   const disadvantagesSet = new Set<string>();
-  
+
   team.value.forEach(pokemonCoverage => {
     pokemonCoverage.coverage.advantages.forEach(adv => advantagesSet.add(adv));
     pokemonCoverage.coverage.disadvantages.forEach(dis => disadvantagesSet.add(dis));
@@ -84,7 +84,7 @@ onMounted(() => {
       :pokemons="pokemons"
       :filter="filter"
       :group-type="groupType"
-      :coverage="coverageTeam"
+      :coverage="selectedPokemon ? coverage : coverageTeam"
       @pokemon-selected="handlePokemonSelected"
     />
     <div class="grow" v-else>Chargement des pokemons...</div>

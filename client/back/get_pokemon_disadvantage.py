@@ -9,8 +9,10 @@ permutations = {
 def get_pokemon_disadvantage(pk_selected: str, remove_prefix: bool):
     # on encode les caractères spéciaux dans la pk
     # on remplace les % dans la pk par des tirets pour match ce qui est dans la base
-    for replacment, word in permutations.items():
-        pk_selected = pk_selected.replace(word, replacment)
+    for word, permut in permutations.items():
+        if (permut in ('M', 'F')):
+            continue
+        pk_selected = pk_selected.replace(permut, word)
     query = f"""
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
