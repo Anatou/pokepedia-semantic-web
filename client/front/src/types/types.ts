@@ -26,3 +26,8 @@ export type Coverage = {
   advantages: string[],
   disadvantages: string[]
 };
+
+export interface PokemonWithCoverage {
+  pokemons: Pokemon[];
+  coverage: Coverage;
+}

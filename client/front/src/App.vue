@@ -3,8 +3,8 @@ import Graph from './components/Graph.vue'
 import Sidebar from './components/Sidebar.vue'
 import Header from './components/Header.vue'
 import TeamBuilder from './components/TeamBuilder.vue' // Importer le nouveau composant
-import {ref, onMounted} from "vue";
-import type {Pokemon, GroupType, Coverage} from "@/types/types.ts";
+import {ref, onMounted, computed} from "vue";
+import type {Pokemon, GroupType, Coverage, PokemonCoverageTeam, PokemonWithCoverage} from "@/types/types.ts";
 
 const pokemons = ref<Pokemon[]>();
 const filter = ref<string>("");
@@ -13,7 +13,26 @@ const selectedPokemon = ref<Pokemon | null>(null);
 
 
 const coverage = ref<Coverage>({advantages: [], disadvantages: []});
-const team = ref<Pokemon[]>([]); // Ajout de la ref pour l'équipe
+const team = ref<PokemonWithCoverage>([]); // Ajout de la ref pour l'équipe
+
+// Computed qui combine team + teamCoverage
+const coverageTeam = computed(() => {
+  const advantagesSet = new Set<string>();
+  const disadvantagesSet = new Set<string>();
+
+  team.value.forEach(pokemonWithCoverage => {
+    pokemonWithCoverage.coverage.advantages.forEach(adv => advantagesSet.add(adv));
+    pokemonWithCoverage.coverage.disadvantages.forEach(dis => disadvantagesSet.add(dis));
+  });
+
+  // Filtrer les désavantages pour éviter les intersections avec les avantages
+  const filteredDisadvantages = Array.from(disadvantagesSet).filter(dis => !advantagesSet.has(dis));
+
+  return {
+    advantages: Array.from(advantagesSet),
+    disadvantages: filteredDisadvantages
+  };
+});
 
 function handlePokemonSelected(pokemon: Pokemon | null) {
   console.log("Pokemon selected", pokemon)
@@ -31,13 +50,13 @@ function handleUpdateCoverage(new_coverage: Coverage) {
 }
 
 function handleAddToTeam(pokemon: Pokemon) {
-  if (team.value.length < 6 && !team.value.some(p => p.pk === pokemon.pk)) {
-    team.value.push(pokemon);
+  if (team.value.pokemons.length < 6 && !team.value.pokemons.some(p => p.pk === pokemon.pk)) {
+    team.value.pokemons.push(pokemon);
   }
 }
 
 function handleRemoveFromTeam(pokemon: Pokemon) {
-  team.value = team.value.filter(p => p.pk !== pokemon.pk);
+  team.value.pokemons = team.value.pokemons.filter(p => p.pk !== pokemon.pk);
 }
 
 onMounted(() => {
@@ -65,7 +84,7 @@ onMounted(() => {
       :pokemons="pokemons"
       :filter="filter"
       :group-type="groupType"
-      :coverage="coverage"
+      :coverage="coverageTeam"
       @pokemon-selected="handlePokemonSelected"
     />
     <div class="grow" v-else>Chargement des pokemons...</div>

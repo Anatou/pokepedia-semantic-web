@@ -38,6 +38,7 @@ const props = defineProps<{
   filter: string,
   groupType: GroupType,
   coverage: Coverage,
+  coverageTeam: Coverage
 }>();
 
 const emit = defineEmits<{
@@ -246,6 +247,53 @@ watch(
       .concat(old_coverage.disadvantages.map(pk => [pk, false]));
     const new_nodes = new_coverage.advantages.map(pk => [pk, true])
       .concat(new_coverage.disadvantages.map(pk => [pk, false]));
+    console.log("old nodes", old_nodes)
+    nodesDS.update(old_nodes
+      .filter(([pk, _adv]) => existingIds.has(pk))
+      .filter(([pk, adv]) => adv ? nodesDS.get(pk)?.color?.background == BG_ADV : nodesDS.get(pk)?.color?.background == BG_DIS)
+      .map(([pk, _adv]) => {
+        return {
+          id: pk,
+          color: {
+            background: 'lightblue',
+            border: 'blue'
+          }
+        }
+      }));
+    console.log("new nodes", new_nodes)
+    nodesDS.update(new_nodes
+      .filter(([pk, _adv]) => existingIds.has(pk))
+      .map(([pk, adv]) => {
+        return {
+          id: pk,
+          color: {
+            background: adv ? BG_ADV : BG_DIS,
+            border: adv ? BR_ADV : BR_DIS
+          }
+        }
+      }));
+  },
+  {deep: true}
+);
+watch(
+  () => props.coverageTeam,
+  (new_coverageTeam, old_coverageTeam) => {
+    const BG_ADV = 'greenyellow';
+    const BR_ADV = 'darkgreen';
+    const BG_DIS = 'red';
+    const BR_DIS = 'darkred';
+
+    const vis = network.value?.network;
+    if (!vis) {
+      return;
+    }
+    const nodesDS = vis.body.data.nodes;
+    const existingIds = new Set(nodesDS.getIds());
+
+    const old_nodes = old_coverageTeam.advantages.map(pk => [pk, true])
+      .concat(old_coverageTeam.disadvantages.map(pk => [pk, false]));
+    const new_nodes = new_coverageTeam.advantages.map(pk => [pk, true])
+      .concat(new_coverageTeam.disadvantages.map(pk => [pk, false]));
     console.log("old nodes", old_nodes)
     nodesDS.update(old_nodes
       .filter(([pk, _adv]) => existingIds.has(pk))

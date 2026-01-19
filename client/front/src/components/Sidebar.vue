@@ -9,6 +9,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'updateCoverage', coverage: Coverage): void
+  (e: 'updateCoverageTeam', coverageTeam: Coverage): void
   (e: 'addToTeam', pokemon: Pokemon): void // Ajout de l'événement 'addToTeam'
 }>();
 
@@ -28,7 +29,7 @@ function addToTeam() {
 }
 
 const isLoadingCoverage = ref(false);
-
+const isLoadingCoverageTeam = ref(false);
 
 watch(() => props.selectedPokemon, async (selectedPokemon) => {
   if (!selectedPokemon) {
@@ -55,6 +56,7 @@ watch(() => props.selectedPokemon, async (selectedPokemon) => {
     isLoadingCoverage.value = false;
   }
 });
+
 </script>
 
 <template>
