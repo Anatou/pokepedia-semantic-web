@@ -1,62 +1,68 @@
 <script setup lang="ts">
-import type { Pokemon } from '@/types/types';
-import { ref } from 'vue';
+import type {Coverage, Pokemon} from '@/types/types';
+import {ref, watch, computed} from 'vue';
 
-const { selectedPokemon } = defineProps<{
-  selectedPokemon: Pokemon | null
+const props = defineProps<{
+  selectedPokemon: Pokemon | null,
+  team: Pokemon[] // Ajout de la prop 'team'
 }>();
 
 const emit = defineEmits<{
-  (e: 'highlightCoverage', pokemonNames: string[]): void
-  (e: 'highlightDisadvantage', pokemonNames: string[]): void
+  (e: 'updateCoverage', coverage: Coverage): void
+  (e: 'addToTeam', pokemon: Pokemon): void // Ajout de l'événement 'addToTeam'
 }>();
 
-const isLoadingCoverage = ref(false);
-const isLoadingDisadvantage = ref(false);
 
-const handleHighlightCoverage = async () => {
-  if (!selectedPokemon) return;
-  
+// Logique pour vérifier si le pokémon est dans l'équipe ou si l'équipe est pleine
+const isPokemonInTeam = computed(() => {
+  if (!props.selectedPokemon) return false;
+  return props.team.some(p => p.pk === props.selectedPokemon?.pk);
+});
+
+const isTeamFull = computed(() => props.team.length >= 6);
+
+function addToTeam() {
+  if (props.selectedPokemon) {
+    emit('addToTeam', props.selectedPokemon);
+  }
+}
+
+const isLoadingCoverage = ref(false);
+
+
+watch(() => props.selectedPokemon, async (selectedPokemon) => {
+  if (!selectedPokemon) {
+    emit('updateCoverage', { advantages: [], disadvantages: [] });
+    return;
+  }
   isLoadingCoverage.value = true;
   try {
-    const response = await fetch(`http://localhost:8020/pokemon/${selectedPokemon.pk}/coverage`);
-    if (!response.ok) throw new Error('Failed to fetch coverage');
-    
-    const data = await response.json();
-    const pokemonNames = data.coverage || [];
-    emit('highlightCoverage', pokemonNames);
+    const response_adv = await fetch(`http://localhost:8020/pokemon/${selectedPokemon.pk}/coverage`);
+    if (!response_adv.ok) throw new Error('Failed to fetch advantages');
+
+    const response_dis = await fetch(`http://localhost:8020/pokemon/${selectedPokemon.pk}/disadvantage`);
+    if (!response_dis.ok) throw new Error('Failed to fetch disadvantage');
+
+    const advantages = (await response_adv.json()).coverage.map(p => p.pk) || [];
+    const disadvantages = (await response_dis.json()).coverage.map(p => p.pk) || [];
+
+    emit('updateCoverage', { advantages, disadvantages });
   } catch (error) {
+    console.log(error)
     alert('Erreur lors de la récupération de la couverture');
+    emit('updateCoverage', { advantages: [], disadvantages: [] });
   } finally {
     isLoadingCoverage.value = false;
   }
-};
-const handleHighlightDisadvantage = async () => {
-  if (!selectedPokemon) return;
-  
-  isLoadingDisadvantage.value = true;
-  try {
-    const response = await fetch(`http://localhost:8020/pokemon/${selectedPokemon.pk}/disadvantage`);
-    if (!response.ok) throw new Error('Failed to fetch disadvantage');
-    
-    const data = await response.json();
-    // Assuming the API returns an object with pokemon names to highlight
-    const pokemonNames = data.coverage || [];
-    emit('highlightDisadvantage', pokemonNames);
-  } catch (error) {
-    alert('Erreur lors de la récupération des désavantages');
-  } finally {
-    isLoadingDisadvantage.value = false;
-  }
-};
+});
 </script>
 
 <template>
-  <aside class="w-[300px] bg-gray-800 text-white p-4 flex-shrink-0 overflow-y-auto">
+  <aside class="w-[300px] bg-gray-800 text-white p-4 shrink-0 overflow-y-auto">
     <div v-if="selectedPokemon">
-      <img 
-        v-if="selectedPokemon.image" 
-        :src="selectedPokemon.image" 
+      <img
+        v-if="selectedPokemon.image"
+        :src="selectedPokemon.image"
         :alt="'Image de ' + selectedPokemon.pk"
         class="w-32 h-32 mx-auto mb-4 rounded-full bg-gray-700"
       >
@@ -78,18 +84,13 @@ const handleHighlightDisadvantage = async () => {
         </a>
       </div>
       <button
-        @click="handleHighlightCoverage"
-        :disabled="isLoadingCoverage"
-        class="w-full mt-6 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-bold py-2 px-4 rounded transition-colors"
+        @click="addToTeam"
+        :disabled="isPokemonInTeam || isTeamFull"
+        class="w-full mt-6 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white font-bold py-2 px-4 rounded transition-colors"
       >
-        {{ isLoadingCoverage ? 'Chargement...' : "Afficher les pokémons qu'il peut battre" }}
-      </button>
-      <button
-        @click="handleHighlightDisadvantage"
-        :disabled="isLoadingDisadvantage"
-        class="w-full mt-6 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-bold py-2 px-4 rounded transition-colors"
-      >
-        {{ isLoadingDisadvantage ? 'Chargement...' : "Afficher les pokémons qui peuvent nous battre" }}
+        <span v-if="isPokemonInTeam">Déjà dans l'équipe</span>
+        <span v-else-if="isTeamFull">Équipe complète</span>
+        <span v-else>Ajouter à l'équipe</span>
       </button>
     </div>
     <div v-else class="text-gray-400 text-center pt-10">
