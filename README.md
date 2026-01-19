@@ -68,11 +68,24 @@ Supported endpoints are:
 }
 ```
 
+- `/pokemon/{pk}/disadvantage`: Gets the list of pokemons that have advantage over the given pokemon:
+
+```json
+{
+	"disadvantage": [
+		"pk1",
+		"pk2",
+		"pk3"
+	]
+}
+```
+
 ## server used for data fetching from SPARQL servers
 ```shell
 cd server
 uvicorn app:app --port 8010
 ```
+
 ## Overall backend server pipeline
 
 ```mermaid

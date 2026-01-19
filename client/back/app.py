@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import get_pokemons
 from get_pokemon_coverage import get_pokemon_coverage
+from get_pokemon_disadvantage import get_pokemon_disadvantage
 
 # Lancer en étant dans le dossier server avec
 # uvicorn app:app --port 8010
@@ -31,6 +32,18 @@ def read_pokemons(remove_prefix: bool = True):
 def exec_sparql(pk: str, remove_prefix: bool = True):
     try:
         res = get_pokemon_coverage(pk, remove_prefix)
+        return res
+    except BaseException as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"An internal error occured: {e}"
+        )
+
+
+@app.get("/pokemon/{pk}/disadvantage")
+def exec_sparql(pk: str, remove_prefix: bool = True):
+    try:
+        res = get_pokemon_disadvantage(pk, remove_prefix)
         return res
     except BaseException as e:
         raise HTTPException(
