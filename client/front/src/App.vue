@@ -4,7 +4,7 @@ import Sidebar from './components/Sidebar.vue'
 import Header from './components/Header.vue'
 import TeamBuilder from './components/TeamBuilder.vue' // Importer le nouveau composant
 import {ref, onMounted, computed} from "vue";
-import type {Pokemon, GroupType, Coverage, PokemonCoverageTeam, PokemonWithCoverage} from "@/types/types.ts";
+import type {Pokemon, GroupType, Coverage, PokemonWithCoverage} from "@/types/types.ts";
 
 const pokemons = ref<Pokemon[]>();
 const filter = ref<string>("");
@@ -13,16 +13,16 @@ const selectedPokemon = ref<Pokemon | null>(null);
 
 
 const coverage = ref<Coverage>({advantages: [], disadvantages: []});
-const team = ref<PokemonWithCoverage>([]); // Ajout de la ref pour l'équipe
+const team = ref<PokemonWithCoverage[]>([]); // Ajout de la ref pour l'équipe
 
 // Computed qui combine team + teamCoverage
 const coverageTeam = computed(() => {
   const advantagesSet = new Set<string>();
   const disadvantagesSet = new Set<string>();
-
-  team.value.forEach(pokemonWithCoverage => {
-    pokemonWithCoverage.coverage.advantages.forEach(adv => advantagesSet.add(adv));
-    pokemonWithCoverage.coverage.disadvantages.forEach(dis => disadvantagesSet.add(dis));
+  
+  team.value.forEach(pokemonCoverage => {
+    pokemonCoverage.coverage.advantages.forEach(adv => advantagesSet.add(adv));
+    pokemonCoverage.coverage.disadvantages.forEach(dis => disadvantagesSet.add(dis));
   });
 
   // Filtrer les désavantages pour éviter les intersections avec les avantages
@@ -50,13 +50,13 @@ function handleUpdateCoverage(new_coverage: Coverage) {
 }
 
 function handleAddToTeam(pokemon: Pokemon) {
-  if (team.value.pokemons.length < 6 && !team.value.pokemons.some(p => p.pk === pokemon.pk)) {
-    team.value.pokemons.push(pokemon);
+  if (team.value.length < 6 && !team.value.some(p => p.pokemon.pk === pokemon.pk)) {
+    team.value.push({pokemon, coverage: coverage.value});
   }
 }
 
 function handleRemoveFromTeam(pokemon: Pokemon) {
-  team.value.pokemons = team.value.pokemons.filter(p => p.pk !== pokemon.pk);
+  team.value = team.value.filter(p => p.pokemon.pk !== pokemon.pk);
 }
 
 onMounted(() => {

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Pokemon } from '@/types/types';
+import type { Pokemon, PokemonWithCoverage } from '@/types/types';
 
 defineProps<{
-  team: Pokemon[]
+  team: PokemonWithCoverage[]
 }>();
 
 const emit = defineEmits(['remove-from-team']);
@@ -19,10 +19,10 @@ function removePokemonFromTeam(pokemon: Pokemon) {
 
     <div v-if="team.length > 0">
       <ul>
-        <li v-for="pokemon in team" :key="pokemon.pk">
-          <img :src="pokemon.image" :alt="pokemon.pk" class="pokemon-icon">
-          <span>{{ pokemon.pk }}</span>
-          <button class="remove-btn" @click="removePokemonFromTeam(pokemon)">X</button>
+        <li v-for="pokemonCoverage in team" :key="pokemonCoverage.pokemon.pk">
+          <img :src="pokemonCoverage.pokemon.image" :alt="pokemonCoverage.pokemon.pk" class="pokemon-icon">
+          <span>{{ pokemonCoverage.pokemon.pk }}</span>
+          <button class="remove-btn" @click="removePokemonFromTeam(pokemonCoverage.pokemon)">X</button>
         </li>
       </ul>
     </div>
