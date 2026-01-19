@@ -3,6 +3,7 @@ import logging
 
 
 def get_pokemon_disadvantage(pk_selected: str, remove_prefix: bool):
+    pk_selected = pk_selected.replace("%", "-")
     query = f"""
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>

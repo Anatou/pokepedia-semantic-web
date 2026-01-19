@@ -3,6 +3,8 @@ import logging
 
 
 def get_pokemon_coverage(pk_selected: str, remove_prefix: bool):
+    # on remplace les % dans la pk par des tirets pour match ce qui est dans la base
+    pk_selected = pk_selected.replace("%", "-")
     query = f"""
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
