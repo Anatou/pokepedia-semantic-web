@@ -9,7 +9,7 @@ permutations = {
 def get_pokemon_coverage(pk_selected: str, remove_prefix: bool):
     # on encode les caractères spéciaux dans la pk
     for replacment, word in permutations.items():
-        pk_selected.replace(word, replacment)
+        pk_selected = pk_selected.replace(word, replacment)
     query = f"""
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
