@@ -1,8 +1,30 @@
-# pokepedia-semantic-web
+# Pokemon Team Builder
 
-This project is based on the RDF data from pokepedia.fr . Its goal is to provide a fun interface to help users build a strategic team of 6 pokemon with ideal type coverage.
+This project is based on the RDF data from pokepedia.fr . Its final purpose is to provide a fun interface to help users build a strategic team of 6 pokemon with ideal type coverage.
 
-The project is splitted between client and sparql server
+# Data source and modifications
+
+### Data origin
+
+The original RDF data came from a scrapping of the RDF API (available here <https://www.pokepedia.fr/Sp%C3%A9cial:Export_RDF>) of pokepedia and was distributed here : <https://lod-cloud.net/dataset/pokepedia-fr> . It is unluckily no longer available. We thus provide it as a compressed archive (rdf/pokepedia-fr_rdfdump20150715.zip).
+
+This data contains only contains the 6 first generations of pokemon (around 2014). Completion with more recent data from pokepedia could be a future improvement but would require good scrapping skills.
+
+### Modifications
+
+Original data had a lot of issues or missing informations for this project, including :
+
+- improper encoding, solved at RDF file loading time by the SPARQL server
+- unpractical typing for important properties, i.e. pokemon types were encoding as strings, we replaced it by resources with a URI to query them more easily in the SPARQL engine
+- missing informations about types effectiveness on each other, which we added based on the file weaknesses.json from <https://gist.github.com/agarie/2620966>
+- from this json file, a script to create triplets with relationships of kinds "avantage", "faiblesse", and "inefficace" between pokemon types
+- all previous modifications are reproductible using the rdf/create_rdf_graph.py
+- additionnaly, the construct query in rdf/effectiveness_triplets_construct_query.txt is used in a SPARQL engine to generate triplets describing advantages relationships betweens pokemons
+- finally, the RDF graph was splitted using rdf/splitter.py in 4 parts to generate the files in the data directory
+
+# Provided utilities
+
+The project provides a SPARQL server to interrogate
 
 - The server exposes a SPARQL enpoint to which SPARQL requests can be made
 - The client uses SPARQL requests to explore and present the data
