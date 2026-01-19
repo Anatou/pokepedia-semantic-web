@@ -39,6 +39,8 @@ const props = defineProps<{
   groupType: GroupType,
   highlightedPokemonsCoverage: string[],
   highlightedPokemonsDisadvantage: string[]
+  highlightedPokemonsCoverageTeam: string[]
+  highlightedPokemonsDisadvantageTeam: string[]
 }>();
 
 const emit = defineEmits<{
@@ -282,6 +284,110 @@ watch(
 watch(
   () => props.highlightedPokemonsDisadvantage,
   (highlighted) => {
+    const vis = network.value?.network;
+    if (!vis) {
+      return;
+    }
+    
+
+    const nodesDS = vis.body.data.nodes;
+    const existingIds = new Set(nodesDS.getIds());
+
+    
+    // NORMALISATION
+    const idsToHighlight = highlighted.map(h =>
+      typeof h === 'string' ? h : h.pk
+    );
+
+    // Reset couleurs
+    existingIds.forEach(pk => {
+     
+        nodesDS.update({
+          id: pk,
+          color:{
+            background: 'lightblue',
+            border: 'blue'
+          }
+        });
+        
+      
+    });
+
+    // Highlight
+    let count = 0;
+    idsToHighlight.forEach(pk => {
+      if (existingIds.has(pk)) {
+        nodesDS.update({
+          id: pk,
+          color: {
+            background: 'red',
+            border: 'darkred'
+          }
+        });
+        count++;
+      } else {
+      }
+    });
+    
+  },
+  { deep: true }
+);
+watch(
+  () => props.highlightedPokemonsCoverageTeam,
+  (highlighted) => {
+    console.log("[graph] Highlighting coverage team pokemons:", highlighted);
+    const vis = network.value?.network;
+    if (!vis) {
+      return;
+    }
+    
+
+    const nodesDS = vis.body.data.nodes;
+    const existingIds = new Set(nodesDS.getIds());
+
+    
+    // NORMALISATION
+    const idsToHighlight = highlighted.map(h =>
+      typeof h === 'string' ? h : h.pk
+    );
+
+    // Reset couleurs
+    existingIds.forEach(pk => {
+     
+        nodesDS.update({
+          id: pk,
+          color:{
+            background: 'lightblue',
+            border: 'blue'
+          }
+        });
+        
+      
+    });
+
+    // Highlight
+    let count = 0;
+    idsToHighlight.forEach(pk => {
+      if (existingIds.has(pk)) {
+        nodesDS.update({
+          id: pk,
+          color: {
+            background: 'greenyellow',
+            border: 'darkgreen'
+          }
+        });
+        count++;
+      } else {
+      }
+    });
+    
+  },
+  { deep: true }
+);
+watch(
+  () => props.highlightedPokemonsDisadvantageTeam,
+  (highlighted) => {
+    console.log("[graph] Highlighting disadvantage team pokemons:", highlighted);
     const vis = network.value?.network;
     if (!vis) {
       return;

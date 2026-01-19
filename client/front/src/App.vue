@@ -12,6 +12,8 @@ const groupType = ref<GroupType>('type1');
 const selectedPokemon = ref<Pokemon | null>(null);
 const highlightedPokemonsCoverage = ref<string[]>([]);
 const highlightedPokemonsDisadvantage = ref<string[]>([]);
+const highlightedPokemonsCoverageTeam = ref<string[]>([]);
+const highlightedPokemonsDisadvantageTeam = ref<string[]>([]);
 const team = ref<Pokemon[]>([]); // Ajout de la ref pour l'équipe
 
 function handlePokemonSelected(pokemon: Pokemon | null) {
@@ -22,6 +24,13 @@ function handleHighlightCoverage(pokemonNames: string[]) {
   }
 function handleHighlightDisadvantage(pokemonNames: string[]) {
   highlightedPokemonsDisadvantage.value = pokemonNames;
+  }
+function handleHighlightCoverageTeam(pokemonNames: string[]) {
+  highlightedPokemonsCoverageTeam.value = pokemonNames;
+  }
+
+function handleHighlightDisadvantageTeam(pokemonNames: string[]) {
+  highlightedPokemonsDisadvantageTeam.value = pokemonNames;
   }
 
 function handleAddToTeam(pokemon: Pokemon) {
@@ -61,6 +70,8 @@ onMounted(() => {
       :group-type="groupType"
       :highlighted-pokemons-coverage="highlightedPokemonsCoverage"
       :highlighted-pokemons-disadvantage="highlightedPokemonsDisadvantage"
+      :highlighted-pokemons-coverage-team="highlightedPokemonsCoverageTeam"
+      :highlighted-pokemons-disadvantage-team="highlightedPokemonsDisadvantageTeam"
       @pokemon-selected="handlePokemonSelected"
     />
     <div v-else>Chargement des pokemons...</div>
@@ -70,6 +81,8 @@ onMounted(() => {
         :team="team"
         @highlight-coverage="handleHighlightCoverage" 
         @highlight-disadvantage="handleHighlightDisadvantage"
+        @highlight-coverage-team="handleHighlightCoverageTeam"
+        @highlight-disadvantage-team="handleHighlightDisadvantageTeam"
         @add-to-team="handleAddToTeam"
       />
       <TeamBuilder :team="team" :pokemons="pokemons" @add-to-team="handleAddToTeam" @remove-from-team="handleRemoveFromTeam" />

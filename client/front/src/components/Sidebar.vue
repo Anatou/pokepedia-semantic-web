@@ -10,11 +10,15 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'highlightCoverage', pokemonNames: string[]): void
   (e: 'highlightDisadvantage', pokemonNames: string[]): void
+  (e: 'highlightCoverageTeam', pokemonNames: string[]): void
+  (e: 'highlightDisadvantageTeam', pokemonNames: string[]): void
   (e: 'addToTeam', pokemon: Pokemon): void // Ajout de l'événement 'addToTeam'
 }>();
 
 const isLoadingCoverage = ref(false);
 const isLoadingDisadvantage = ref(false);
+const isLoadingCoverageTeam = ref(false);
+const isLoadingDisadvantageTeam = ref(false);
 
 // Logique pour vérifier si le pokémon est dans l'équipe ou si l'équipe est pleine
 const isPokemonInTeam = computed(() => {
@@ -65,6 +69,55 @@ const handleHighlightDisadvantage = async () => {
     isLoadingDisadvantage.value = false;
   }
 };
+
+const handleHighlightCoverageTeam = async () => {
+  if (!props.team) return;
+  if(props.team.length === 0){
+    alert("L'équipe est vide !");
+    return;
+  }
+  isLoadingCoverageTeam.value = true;
+  try {
+    const pokemonNames = [];
+    for (const pokemon of props.team) {
+      const response = await fetch(`http://localhost:8020/pokemon/${pokemon.pk}/coverage`);
+      if (!response.ok) throw new Error('Failed to fetch coverage for team member');
+    
+    const data = await response.json();
+    pokemonNames.push(...(data.coverage || []));
+    }
+    console.log("Coverage team pokemons:", pokemonNames);
+    emit('highlightCoverageTeam', pokemonNames);
+  } catch (error) {
+    alert('Erreur lors de la récupération de la couverture');
+  } finally {
+    isLoadingCoverageTeam.value = false;
+  }
+};
+
+const handleHighlightDisadvantageTeam = async () => {
+  if (!props.team) return;
+  if(props.team.length === 0) return;
+  
+  isLoadingDisadvantageTeam.value = true;
+  try {
+    const pokemonNames = [];
+    for (const pokemon of props.team) {
+      const response = await fetch(`http://localhost:8020/pokemon/${pokemon.pk}/disadvantage`);
+      if (!response.ok) throw new Error('Failed to fetch disadvantage for team member');
+    
+    const data = await response.json();
+    pokemonNames.push(...(data.coverage || []));
+    }
+    console.log("Disadvantage team pokemons:", pokemonNames);
+    emit('highlightDisadvantageTeam', pokemonNames);
+  } catch (error) {
+    alert('Erreur lors de la récupération des désavantages');
+  } finally {
+    isLoadingDisadvantageTeam.value = false;
+  }
+};
+
 </script>
 
 <template>
@@ -115,6 +168,20 @@ const handleHighlightDisadvantage = async () => {
         class="w-full mt-6 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-bold py-2 px-4 rounded transition-colors"
       >
         {{ isLoadingDisadvantage ? 'Chargement...' : "Afficher les pokémons qui peuvent nous battre" }}
+      </button>
+      <button v-if="props.team.length > 0"
+        @click="handleHighlightCoverageTeam"
+        :disabled="isLoadingCoverageTeam"
+        class="w-full mt-6 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 text-white font-bold py-2 px-4 rounded transition-colors"
+      >
+        {{ isLoadingCoverageTeam ? 'Chargement...' : "Afficher coverage de l'équipe" }}
+      </button>
+      <button v-if="props.team.length > 0"
+        @click="handleHighlightDisadvantageTeam"
+        :disabled="isLoadingDisadvantageTeam"
+        class="w-full mt-6 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 text-white font-bold py-2 px-4 rounded transition-colors"
+      >
+        {{ isLoadingDisadvantageTeam ? 'Chargement...' : "Afficher désavantages de l'équipe" }}
       </button>
     </div>
     <div v-else class="text-gray-400 text-center pt-10">
