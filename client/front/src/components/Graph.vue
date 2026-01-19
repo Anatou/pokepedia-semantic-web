@@ -366,11 +366,10 @@ function onNodeClick(event: { nodes: string[] }) {
 </script>
 
 <template>
-  <div class="graph">
+  <div class="grow">
     <Network
-      class="network"
+      class="h-full"
       ref="network"
-
       :nodes="nodes"
       :edges="edges"
       :options="networkOptions"
@@ -382,10 +381,4 @@ function onNodeClick(event: { nodes: string[] }) {
 </template>
 
 <style scoped>
-.graph {
-  flex-grow: 1;
-}
-.graph .network {
-  height: 100%;
-}
 </style>

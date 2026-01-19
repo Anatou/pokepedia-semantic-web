@@ -120,6 +120,8 @@ main > * {
   flex-direction: column;
   gap: 1px;
   overflow: hidden; /* Empêche le conteneur de déborder */
+  flex-basis: 600px;
+  flex-grow: 0;
 }
 
 .sidebar-container > :first-child { /* Cible la Sidebar */
