@@ -1,4 +1,4 @@
-# pokepedia-semantic-web
+# Pokemon Team Builder
 
 This project is based on the RDF data from pokepedia.fr . Its final purpose is to provide a fun interface to help users build a strategic team of 6 pokemon with ideal type coverage.
 
@@ -19,7 +19,8 @@ Original data had a lot of issues or missing informations for this project, incl
 - missing informations about types effectiveness on each other, which we added based on the file weaknesses.json from <https://gist.github.com/agarie/2620966>
 - from this json file, a script to create triplets with relationships of kinds "avantage", "faiblesse", and "inefficace" between pokemon types
 - all previous modifications are reproductible using the rdf/create_rdf_graph.py
-- additionnaly, the construct query
+- additionnaly, the construct query in rdf/effectiveness_triplets_construct_query.txt is used in a SPARQL engine to generate triplets describing advantages relationships betweens pokemons
+- finally, the RDF graph was splitted using rdf/splitter.py in 4 parts to generate the files in the data directory
 
 # Provided utilities
 
