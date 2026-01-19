@@ -37,7 +37,8 @@ const props = defineProps<{
   pokemons: Pokemon[],
   filter: string,
   groupType: GroupType,
-  highlightedPokemons: string[],
+  highlightedPokemonsCoverage: string[],
+  highlightedPokemonsDisadvantage: string[]
 }>();
 
 const emit = defineEmits<{
@@ -228,7 +229,7 @@ const computeGraph = () => {
 onMounted(computeGraph)
 watch(() => [props.pokemons, props.filter, props.groupType], computeGraph, { deep: true })
 watch(
-  () => props.highlightedPokemons,
+  () => props.highlightedPokemonsCoverage,
   (highlighted) => {
     const vis = network.value?.network;
     if (!vis) {
@@ -240,7 +241,7 @@ watch(
     const existingIds = new Set(nodesDS.getIds());
 
     
-    // 🔑 NORMALISATION
+    // NORMALISATION
     const idsToHighlight = highlighted.map(h =>
       typeof h === 'string' ? h : h.pk
     );
@@ -266,8 +267,59 @@ watch(
         nodesDS.update({
           id: pk,
           color: {
-            background: 'orange',
-            border: 'darkorange'
+            background: 'greenyellow',
+            border: 'darkgreen'
+          }
+        });
+        count++;
+      } else {
+      }
+    });
+    
+  },
+  { deep: true }
+);
+watch(
+  () => props.highlightedPokemonsDisadvantage,
+  (highlighted) => {
+    const vis = network.value?.network;
+    if (!vis) {
+      return;
+    }
+    
+
+    const nodesDS = vis.body.data.nodes;
+    const existingIds = new Set(nodesDS.getIds());
+
+    
+    // NORMALISATION
+    const idsToHighlight = highlighted.map(h =>
+      typeof h === 'string' ? h : h.pk
+    );
+
+    // Reset couleurs
+    existingIds.forEach(pk => {
+     
+        nodesDS.update({
+          id: pk,
+          color:{
+            background: 'lightblue',
+            border: 'blue'
+          }
+        });
+        
+      
+    });
+
+    // Highlight
+    let count = 0;
+    idsToHighlight.forEach(pk => {
+      if (existingIds.has(pk)) {
+        nodesDS.update({
+          id: pk,
+          color: {
+            background: 'red',
+            border: 'darkred'
           }
         });
         count++;
