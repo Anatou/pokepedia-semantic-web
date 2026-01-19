@@ -77,6 +77,9 @@ const computeGraph = () => {
           color: {
             background: 'lightgray',
             border: 'gray'
+          },
+          font: {
+            size: 24
           }
         });
         groupsToId.set(p.type1, groupId);
@@ -91,6 +94,9 @@ const computeGraph = () => {
             color: {
               background: 'lightgray',
               border: 'gray'
+            },
+            font: {
+              size: 24
             }
           });
           groupsToId.set(p.type2, groupId);
@@ -106,6 +112,9 @@ const computeGraph = () => {
           color: {
             background: 'lightgray',
             border: 'gray'
+          },
+          font: {
+            size: 24
           }
         });
         groupsToId.set(p.type1, groupId);
@@ -119,6 +128,9 @@ const computeGraph = () => {
             color: {
               background: 'lightgray',
               border: 'gray'
+            },
+            font: {
+              size: 24
             }
           });
           groupsToId.set(p.type2, groupId);
@@ -133,6 +145,9 @@ const computeGraph = () => {
           color: {
             background: 'lightgray',
             border: 'gray'
+          },
+          font: {
+            size: 24
           }
         });
         groupsToId.set(p.gen, groupId);
@@ -146,6 +161,9 @@ const computeGraph = () => {
           color: {
             background: 'lightgray',
             border: 'gray'
+          },
+          font: {
+            size: 24
           }
         });
         groupsToId.set(p.famille, groupId);
