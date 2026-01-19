@@ -73,7 +73,11 @@ const computeGraph = () => {
       if (!groupsToId.has(p.type1)) {
         nodesBuilder.push({
           id: groupId,
-          label: p.type1
+          label: p.type1,
+          color: {
+            background: 'lightgray',
+            border: 'gray'
+          }
         });
         groupsToId.set(p.type1, groupId);
         groupId++;
@@ -83,7 +87,11 @@ const computeGraph = () => {
         if (!groupsToId.has(p.type2)) {
           nodesBuilder.push({
             id: groupId,
-            label: p.type2
+            label: p.type2,
+            color: {
+            background: 'lightgray',
+            border: 'gray'
+          }
           });
           groupsToId.set(p.type2, groupId);
           groupId++;
@@ -94,7 +102,11 @@ const computeGraph = () => {
       if (!groupsToId.has(p.type1)) {
         nodesBuilder.push({
           id: groupId,
-          label: p.type1
+          label: p.type1,
+          color: {
+            background: 'lightgray',
+            border: 'gray'
+          }
         });
         groupsToId.set(p.type1, groupId);
         groupId++;
@@ -103,7 +115,11 @@ const computeGraph = () => {
         if (!groupsToId.has(p.type2)) {
           nodesBuilder.push({
             id: groupId,
-            label: p.type2
+            label: p.type2,
+            color: {
+            background: 'lightgray',
+            border: 'gray'
+          }
           });
           groupsToId.set(p.type2, groupId);
           groupId++;
@@ -113,7 +129,11 @@ const computeGraph = () => {
       if (!groupsToId.has(p.gen)) {
         nodesBuilder.push({
           id: groupId,
-          label: p.gen
+          label: p.gen,
+          color: {
+            background: 'lightgray',
+            border: 'gray'
+          }
         });
         groupsToId.set(p.gen, groupId);
         groupId++;
@@ -122,7 +142,11 @@ const computeGraph = () => {
       if (!groupsToId.has(p.famille)) {
         nodesBuilder.push({
           id: groupId,
-          label: p.famille
+          label: p.famille,
+          color: {
+            background: 'lightgray',
+            border: 'gray'
+          }
         });
         groupsToId.set(p.famille, groupId);
         groupId++;
