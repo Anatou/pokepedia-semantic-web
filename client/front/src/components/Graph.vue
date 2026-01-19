@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import {onMounted, ref, watch} from "vue";
-import {Network} from 'vue3-visjs'
-import type {Coverage, Edge, GroupType, Node, Pokemon} from "@/types/types.ts";
-
+import { onMounted, ref, watch } from "vue";
+import { Network } from 'vue3-visjs'
+import type { Edge, Node, Pokemon, GroupType, Coverage } from "@/types/types.ts";
+import type { Network as VisNetwork } from "vis-network";
 const network = ref<InstanceType<typeof Network> | null>(null);
 
 const onClickZoom = (params: any) => {
