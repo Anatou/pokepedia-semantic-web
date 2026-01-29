@@ -1,0 +1,154 @@
+Ce fichier contient la requete sparql permettant de construire un graphe des relations de forces/faiblesses entre pokemon.
+Son résultat est stocké dans advantages.rdf
+
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX property: <http://www.pokepedia.fr/Sp%C3%A9cial:URIResolver/Attribut-3A> 
+PREFIX swivt: <http://semantic-mediawiki.org/swivt/1.0#>
+PREFIX wiki: <http://www.pokepedia.fr/Sp%C3%A9cial:URIResolver/>
+PREFIX category: <http://www.pokepedia.fr/Sp%C3%A9cial:URIResolver/Category-3A>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+CONSTRUCT {
+	?pk wiki:avantage ?pkmn_autre
+}
+WHERE {
+    {
+        ?pk property:Num-C3-A9ro_National ?numString.
+        ?pk property:Premier_type ?type1.
+        ?pk rdfs:isDefinedBy ?url.
+        ?pk property:Famille ?famille.
+        ?pk property:G-C3-A9n-C3-A9ration_du_Pok-C3-A9mon ?gen
+        BIND( xsd:integer(?numString) AS ?num)
+        FILTER( ?num > 0 )
+        FILTER( !regex(str(?pk), "Projet"))
+        FILTER( !regex(str(?pk), "Utilisateur"))
+
+        ?pkmn_autre property:Num-C3-A9ro_National ?numString_autre.
+        ?pkmn_autre property:Premier_type ?type1_autre.
+        ?pkmn_autre rdfs:isDefinedBy ?url_autre.
+        ?pkmn_autre property:Famille ?famille_autre.
+        ?pkmn_autre property:G-C3-A9n-C3-A9ration_du_Pok-C3-A9mon ?gen_autre
+        BIND( xsd:integer(?numString_autre) AS ?num_autre)
+        FILTER( ?num_autre > 0 )
+        FILTER( !regex(str(?pkmn_autre), "Projet"))
+        FILTER( !regex(str(?pkmn_autre), "Utilisateur"))
+
+        ?type1 wiki:avantage ?type1_autre .
+    }
+    UNION
+    {
+        ?pk property:Num-C3-A9ro_National ?numString.
+        ?pk property:Premier_type ?type1.
+        ?pk rdfs:isDefinedBy ?url.
+        ?pk property:Famille ?famille.
+        ?pk property:G-C3-A9n-C3-A9ration_du_Pok-C3-A9mon ?gen
+        BIND( xsd:integer(?numString) AS ?num)
+        FILTER( ?num > 0 )
+        FILTER( !regex(str(?pk), "Projet"))
+        FILTER( !regex(str(?pk), "Utilisateur"))
+
+        ?pkmn_autre property:Num-C3-A9ro_National ?numString_autre.
+        ?pkmn_autre property:Premier_type ?type1_autre.
+        ?pkmn_autre property:Second_type ?type2_autre.
+        ?pkmn_autre rdfs:isDefinedBy ?url_autre.
+        ?pkmn_autre property:Famille ?famille_autre.
+        ?pkmn_autre property:G-C3-A9n-C3-A9ration_du_Pok-C3-A9mon ?gen_autre
+        BIND( xsd:integer(?numString_autre) AS ?num_autre)
+        FILTER( ?num_autre > 0 )
+        FILTER( !regex(str(?pkmn_autre), "Projet"))
+        FILTER( !regex(str(?pkmn_autre), "Utilisateur"))
+
+        {
+            ?type1 wiki:avantage ?type1_autre .
+            FILTER NOT EXISTS {?type1 wiki:faiblesse ?type2_autre} .
+            FILTER NOT EXISTS {?type1 wiki:inefficace ?type2_autre} .
+        }
+        UNION
+        {
+            ?type1 wiki:avantage ?type2_autre .
+            FILTER NOT EXISTS {?type1 wiki:faiblesse ?type1_autre} .
+            FILTER NOT EXISTS {?type1 wiki:inefficace ?type1_autre} .
+        }
+    }
+    UNION
+    {
+        ?pk property:Num-C3-A9ro_National ?numString.
+        ?pk property:Premier_type ?type1.
+        ?pk property:Second_type ?type2.
+        ?pk rdfs:isDefinedBy ?url.
+        ?pk property:Famille ?famille.
+        ?pk property:G-C3-A9n-C3-A9ration_du_Pok-C3-A9mon ?gen
+        BIND( xsd:integer(?numString) AS ?num)
+        FILTER( ?num > 0 )
+        FILTER( !regex(str(?pk), "Projet"))
+        FILTER( !regex(str(?pk), "Utilisateur"))
+
+        ?pkmn_autre property:Num-C3-A9ro_National ?numString_autre.
+        ?pkmn_autre property:Premier_type ?type1_autre.
+        ?pkmn_autre rdfs:isDefinedBy ?url_autre.
+        ?pkmn_autre property:Famille ?famille_autre.
+        ?pkmn_autre property:G-C3-A9n-C3-A9ration_du_Pok-C3-A9mon ?gen_autre
+        BIND( xsd:integer(?numString_autre) AS ?num_autre)
+        FILTER( ?num_autre > 0 )
+        FILTER( !regex(str(?pkmn_autre), "Projet"))
+        FILTER( !regex(str(?pkmn_autre), "Utilisateur"))
+
+        {
+            ?type1 wiki:avantage ?type1_autre .
+        }
+        UNION
+        {
+            ?type2 wiki:avantage ?type1_autre .
+        }
+    }
+    UNION
+    {
+        ?pk property:Num-C3-A9ro_National ?numString.
+        ?pk property:Premier_type ?type1.
+        ?pk property:Second_type ?type2.
+        ?pk rdfs:isDefinedBy ?url.
+        ?pk property:Famille ?famille.
+        ?pk property:G-C3-A9n-C3-A9ration_du_Pok-C3-A9mon ?gen
+        BIND( xsd:integer(?numString) AS ?num)
+        FILTER( ?num > 0 )
+        FILTER( !regex(str(?pk), "Projet"))
+        FILTER( !regex(str(?pk), "Utilisateur"))
+
+        ?pkmn_autre property:Num-C3-A9ro_National ?numString_autre.
+        ?pkmn_autre property:Premier_type ?type1_autre.
+        ?pkmn_autre property:Second_type ?type2_autre.
+        ?pkmn_autre rdfs:isDefinedBy ?url_autre.
+        ?pkmn_autre property:Famille ?famille_autre.
+        ?pkmn_autre property:G-C3-A9n-C3-A9ration_du_Pok-C3-A9mon ?gen_autre
+        BIND( xsd:integer(?numString_autre) AS ?num_autre)
+        FILTER( ?num_autre > 0 )
+        FILTER( !regex(str(?pkmn_autre), "Projet"))
+        FILTER( !regex(str(?pkmn_autre), "Utilisateur"))
+
+        {
+            ?type1 wiki:avantage ?type1_autre .
+            FILTER NOT EXISTS {?type1 wiki:faiblesse ?type2_autre} .
+            FILTER NOT EXISTS {?type1 wiki:inefficace ?type2_autre} .
+        }
+        UNION
+        {
+            ?type1 wiki:avantage ?type2_autre .
+            FILTER NOT EXISTS {?type1 wiki:faiblesse ?type1_autre} .
+            FILTER NOT EXISTS {?type1 wiki:inefficace ?type1_autre} .
+        }
+        UNION
+        {
+            ?type2 wiki:avantage ?type1_autre .
+            FILTER NOT EXISTS {?type1 wiki:faiblesse ?type2_autre} .
+            FILTER NOT EXISTS {?type1 wiki:inefficace ?type2_autre} .
+        }
+        UNION
+        {
+            ?type2 wiki:avantage ?type2_autre .
+            FILTER NOT EXISTS {?type1 wiki:faiblesse ?type1_autre} .
+            FILTER NOT EXISTS {?type1 wiki:inefficace ?type1_autre} .
+        }
+    }
+}

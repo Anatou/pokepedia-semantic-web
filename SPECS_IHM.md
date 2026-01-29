@@ -1,0 +1,104 @@
+
+# Côté back
+
+Appeler l'endpoint sparql pour obtenir des infos sur les pokemon et les transmettre au front :
+
+̏```rdf
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX property: <http://www.pokepedia.fr/Sp%C3%A9cial:URIResolver/Attribut-3A> 
+PREFIX swivt: <http://semantic-mediawiki.org/swivt/1.0#>
+PREFIX wiki: <http://www.pokepedia.fr/Sp%C3%A9cial:URIResolver/>
+PREFIX category: <http://www.pokepedia.fr/Sp%C3%A9cial:URIResolver/Category-3A>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?num ?pk ?type1 ?type2 ?gen ?famille ?url 
+WHERE { 
+	?pk property:Num-C3-A9ro_National ?numString.
+	?pk property:Premier_type ?type1.
+	OPTIONAL { ?pk property:Second_type ?type2. }
+	?pk rdfs:isDefinedBy ?url.
+	?pk property:Famille ?famille.
+	?pk property:G-C3-A9n-C3-A9ration_du_Pok-C3-A9mon ?gen
+	BIND( xsd:integer(?numString) AS ?num)
+	FILTER( ?num > 0 )
+	FILTER( !regex(str(?pk), "Projet"))
+	FILTER( !regex(str(?pk), "Utilisateur"))
+}
+ORDER BY asc(?num)
+```
+
+Appeler l'endpoint quand un pokemon est selectionné pour obtenir la liste de ceux sur lesquels on a le coverage
+ 
+```rdf
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX property: <http://www.pokepedia.fr/Sp%C3%A9cial:URIResolver/Attribut-3A> 
+PREFIX swivt: <http://semantic-mediawiki.org/swivt/1.0#>
+PREFIX wiki: <http://www.pokepedia.fr/Sp%C3%A9cial:URIResolver/>
+PREFIX category: <http://www.pokepedia.fr/Sp%C3%A9cial:URIResolver/Category-3A>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?pk
+WHERE { 
+	wiki:{pokemon_selectionné} wiki:avantage ?pk
+}
+```
+
+
+# Côté front
+1. au chargement récupérer toutes les infos sur les pokemon, créer un node pour chaque pokemon
+2. dans le détail des nodes mettre un lien vers la page du pokemon : https://www.pokepedia.fr/Pokemon
+3. avoir plusieurs modes d'affichage 
+    - groupé par type où un node est créé pour chaque type et les pkmn sont relié à leur ou leurs types
+    - groupé par famille avec un node par famille
+    - groupé par génération avec un node par génération
+4. permettre de sélectionner une équipe de pokémon (de 1 à 6). lorsqu'un pokemon est sélectionné le back renvoie tous les pokemon à mettre en surbrillance (ceux sur lesquels on a désormais l'avantage)
+
+
+# Endpoints backend
+
+## GET /pokemons
+
+```json
+{
+	"pokemons": [
+		{
+			"num": "56",
+			"pk": "234245",
+			"type1": "eau",
+			"type2": "feu",
+			"gen": "Gen A",
+			"famille": "famille A",
+			"url": "https://www.pokepedia.fr/Zygarde"
+		},
+		{
+			
+		}
+	]
+}
+```
+
+## GET /pokemon/[pk]/coverage
+
+```json
+{
+	"coverage": [
+		"pk1",
+		"pk2",
+		"pk3"
+	]
+}
+```
+
+## GET /pokemon/[pk]/disadvantage
+
+```json
+{
+	"disadvantage": [
+		"pk1",
+		"pk2",
+		"pk3"
+	]
+}
+```
